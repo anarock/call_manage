@@ -107,10 +107,6 @@
             android:name=".ui.activity.SettingsActivity"
             android:label="@string/activity_settings"
             android:theme="@style/AppTheme.Light.Pink" />
-        <activity
-            android:name=".ui.activity.AboutActivity"
-            android:label="@string/activity_about"
-            android:theme="@style/AppTheme.Light.Pink" />
 
         <service
             android:name=".service.CallService"
