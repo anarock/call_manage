@@ -71,4 +71,12 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Version">
+
+        <Preference
+            android:key="@string/pref_version_key"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
