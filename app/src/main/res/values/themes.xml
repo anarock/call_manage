@@ -16,7 +16,6 @@
         <item name="dialogBackgroundColor">?attr/colorPrimary</item>
 
         <item name="android:windowBackground">?attr/colorPrimary</item>
-        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
 
@@ -39,7 +38,6 @@
 
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">?attr/colorPrimary</item>
-        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="dialogBackgroundColor">@color/grey_800</item>
 

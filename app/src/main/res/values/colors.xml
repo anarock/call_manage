@@ -7,7 +7,7 @@
     <color name="color_primary_amoled">@color/black</color>
 
     <color name="color_accent_green">#47A799</color>
-    <color name="color_accent_pink">#EC134E</color>
+    <color name="color_accent_pink">#6161FF</color>
 
     <color name="icon_active_light">#3D3D3D</color>
     <color name="icon_active_dark">#FFFFFF</color>
