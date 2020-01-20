@@ -12,6 +12,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
+import com.anarock.callmanager.BuildConfig;
 import com.anarock.callmanager.R;
 import com.anarock.callmanager.util.ThemeUtils;
 import com.anarock.callmanager.util.Utilities;
@@ -124,6 +125,9 @@ public class SettingsActivity extends AbsThemeActivity {
             // Sim selection
             ListPreference simSelectionPreference = (ListPreference) findPreference(getString(R.string.pref_sim_select_key));
             simSelectionPreference.setOnPreferenceChangeListener(listChangeListener);
+
+            // Version
+            findPreference(getString(R.string.pref_version_key)).setTitle(BuildConfig.VERSION_NAME);
 
             if (!Utilities.checkPermissionsGranted(getContext(), READ_PHONE_STATE)) {
                 Utilities.askForPermission(getActivity(), READ_PHONE_STATE);

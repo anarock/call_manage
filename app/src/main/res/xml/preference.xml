@@ -67,4 +67,14 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/pref_category_version"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="@string/pref_version_key"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
