@@ -947,7 +947,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
         PendingIntent hangupPendingIntent = PendingIntent.getBroadcast(this, 1, hangupIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.icon_full_144)
+                .setSmallIcon(R.drawable.notification_icon)
                 .setContentTitle(callerName)
                 .setContentText(mStateText)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
