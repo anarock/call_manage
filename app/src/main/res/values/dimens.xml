@@ -46,7 +46,6 @@
     <dimen name="shadow_length">10dp</dimen>
 
     <!-- About activity -->
-    <dimen name="about_page_padding">10dp</dimen>
     <dimen name="header_width">30dp</dimen>
     <dimen name="item_two_line_height">64dp</dimen>
 </resources>

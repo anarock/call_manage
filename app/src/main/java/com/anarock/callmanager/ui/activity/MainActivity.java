@@ -24,7 +24,6 @@ import com.anarock.callmanager.BuildConfig;
 import com.anarock.callmanager.R;
 import com.anarock.callmanager.adapter.CustomPagerAdapter;
 import com.anarock.callmanager.ui.FABCoordinator;
-import com.anarock.callmanager.ui.dialog.ChangelogDialog;
 import com.anarock.callmanager.ui.fragment.DialpadFragment;
 import com.anarock.callmanager.ui.fragment.SearchBarFragment;
 import com.anarock.callmanager.util.PreferenceUtils;
@@ -368,7 +367,6 @@ public class MainActivity extends AbsSearchBarActivity {
         int lastVersionCode = PreferenceUtils.getInstance().getInt(R.string.pref_last_version_key);
         if (lastVersionCode < BuildConfig.VERSION_CODE) {
             PreferenceUtils.getInstance().putInt(R.string.pref_last_version_key, BuildConfig.VERSION_CODE);
-            new ChangelogDialog().show(getSupportFragmentManager(), TAG_CHANGELOG_DIALOG);
         }
     }
 

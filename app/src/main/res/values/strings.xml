@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Koler</string>
-    <string name="support_email">choolookulu@gmail.com</string>
-    <string name="app_source_url">https://github.com/Chooloo/call_manage</string>
-    <string name="app_bug_reporting_url">https://github.com/Chooloo/call_manage/issues</string>
-    <string name="donation_link">https://github.com/Chooloo/call_manage/blob/master/README.md#support</string>
 
     <!--Activities-->
     <string name="activity_ongoing_call">Ongoing Call</string>
@@ -17,7 +13,6 @@
 
     <string name="action_dismiss">Dismiss</string>
     <string name="action_edit">Edit</string>
-    <string name="action_feature_request">Feature Request</string>
 
     <!--Preferences-->
     <string name="pref_category_look_and_feel">Look and Feel</string>
@@ -84,8 +79,6 @@
 
     <string name="dialog_long_click_cgroup_title">What would you like to do?</string>
 
-    <string name="dialog_changelog_title">Changelog</string>
-
     <!--Empty-->
     <string name="empty_cgroups_title">Nothing here… yet</string>
     <string name="empty_cgroups_desc">You can try to add something</string>
@@ -97,23 +90,6 @@
     <string name="empty_recents_desc" />
 
     <!--About-->
-    <string name="about_version_title">Version</string>
-    <string name="about_changelog_title">Changelog</string>
-    <string name="about_source_title">Github Source</string>
-    <string name="about_email_title">Write an Email</string>
-    <string name="about_roei_title">Roei Edri</string>
-    <string name="about_ido_title">Ido Fang Bentov</string>
-
-    <string name="about_support_title">Support</string>
-
-    <string name="about_bugs_title">Report Bugs</string>
-    <string name="about_bugs_desc">Report any issues or request new features on our GitHub page.</string>
-
-    <string name="about_rate_title">Rate</string>
-    <string name="about_rate_desc">If you like the app, leave a positive feedback.</string>
-
-    <string name="about_donate_desc">If you think we deserve to get paid for our work, leave a few dollars here.</string>
-    <string name="about_donate_title">Donate</string>
 
     <!--Other-->
     <string name="reject_timer_indicator">Call ends in</string>
@@ -155,7 +131,6 @@
     <string name="password_message">Log in with your password</string>
 
     <!-- Notification -->
-    <string name="active_call_notification_text">Is calling...</string>
     <string name="channel_name">notification</string>
     <string name="channel_description">On Going Call</string>
     <string name="action_answer">Answer</string>
