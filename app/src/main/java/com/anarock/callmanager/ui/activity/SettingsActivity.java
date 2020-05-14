@@ -86,15 +86,15 @@ public class SettingsActivity extends AbsThemeActivity {
                 return true;
             };
 
-            // App Color
-            ListPreference appColorPreference = (ListPreference) findPreference(getString(R.string.pref_app_color_key));
-            appColorPreference.setOnPreferenceChangeListener(colorChangeListener);
-            appColorPreference.setSummary(appColorPreference.getEntry());
-
-            // App theme
-            ListPreference appThemePreference = (ListPreference) findPreference(getString(R.string.pref_app_theme_key));
-            appThemePreference.setOnPreferenceChangeListener(themeChangeListener);
-            appThemePreference.setSummary(appThemePreference.getEntry());
+//            // App Color
+//            ListPreference appColorPreference = (ListPreference) findPreference(getString(R.string.pref_app_color_key));
+//            appColorPreference.setOnPreferenceChangeListener(colorChangeListener);
+//            appColorPreference.setSummary(appColorPreference.getEntry());
+//
+//            // App theme
+//            ListPreference appThemePreference = (ListPreference) findPreference(getString(R.string.pref_app_theme_key));
+//            appThemePreference.setOnPreferenceChangeListener(themeChangeListener);
+//            appThemePreference.setSummary(appThemePreference.getEntry());
 
             // End call timer
             ListPreference rejectCallTimerPreference = (ListPreference) findPreference(getString(R.string.pref_reject_call_timer_key));
