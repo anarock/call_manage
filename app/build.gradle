@@ -6,7 +6,7 @@ android {
         applicationId "com.anarock.callmanager"
         minSdkVersion 25
         targetSdkVersion 28
-        versionCode 35
+        versionCode 36
         versionName "v0.5.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
