@@ -2,6 +2,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+<!--    <PreferenceCategory android:title="@string/pref_category_look_and_feel">-->
+
+<!--        <ListPreference-->
+<!--            android:defaultValue="@string/pref_app_theme_default_value"-->
+<!--            android:entries="@array/pref_app_theme_entries"-->
+<!--            android:entryValues="@array/pref_app_theme_entry_values"-->
+<!--            android:key="@string/pref_app_theme_key"-->
+<!--            android:title="@string/pref_app_theme_title" />-->
+
+<!--        <ListPreference-->
+<!--            android:defaultValue="@string/pref_app_color_default_value"-->
+<!--            android:entries="@array/pref_app_color_entries"-->
+<!--            android:entryValues="@array/pref_app_color_entry_values"-->
+<!--            android:key="@string/pref_app_color_key"-->
+<!--            android:title="@string/pref_app_color_title" />-->
+
+<!--    </PreferenceCategory>-->
+
     <PreferenceCategory android:title="@string/pref_category_call">
 
         <ListPreference
