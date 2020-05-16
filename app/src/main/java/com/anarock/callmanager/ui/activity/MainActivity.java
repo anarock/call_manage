@@ -420,7 +420,7 @@ public class MainActivity extends AbsSearchBarActivity {
         int lastVersionCode = PreferenceUtils.getInstance().getInt(R.string.pref_last_version_key);
         if (lastVersionCode < BuildConfig.VERSION_CODE) {
             PreferenceUtils.getInstance().putInt(R.string.pref_last_version_key, BuildConfig.VERSION_CODE);
-            new ChangelogDialog().show(getSupportFragmentManager(), TAG_CHANGELOG_DIALOG);
+//            new ChangelogDialog().show(getSupportFragmentManager(), TAG_CHANGELOG_DIALOG);
         }
     }
 
