@@ -12,11 +12,11 @@ import com.anarock.callmanager.ui.fragment.RecentsFragment;
 public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     // -- Constants -- //
-    private final static int NUM_ITEMS = 3;
+    private final static int NUM_ITEMS = 2;
     // Fragment titles
     private final static String FIRST_POSITION_TITLE = "Recents";
     private final static String SECOND_POSITION_TITLE = "Contacts";
-    private final static String THIRD_POSITION_TITLE = "Excel";
+//    private final static String THIRD_POSITION_TITLE = "Excel";
 
     /**
      * Constructor
@@ -71,8 +71,8 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
                 return FIRST_POSITION_TITLE;
             case 1:
                 return SECOND_POSITION_TITLE;
-            case 2:
-                return THIRD_POSITION_TITLE;
+//            case 2:
+//                return THIRD_POSITION_TITLE;
             default:
                 return null;
         }
