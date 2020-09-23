@@ -1,9 +1,11 @@
 package com.chooloo.www.callmanager.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,7 @@ import androidx.preference.SwitchPreference;
 
 import com.chooloo.www.callmanager.BuildConfig;
 import com.chooloo.www.callmanager.R;
+import com.chooloo.www.callmanager.util.PermissionUtils;
 import com.chooloo.www.callmanager.util.ThemeUtils;
 import com.chooloo.www.callmanager.util.Utilities;
 
@@ -59,8 +62,8 @@ public class SettingsActivity extends AbsThemeActivity {
                 CharSequence[] entries = listPreference.getEntries();
                 listPreference.setSummary(entries[listPreference.findIndexOfValue((String) newValue)]);
 
-                getActivity().finish();
-                startActivity(getActivity().getIntent());
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
                 return true;
             };
 
@@ -69,8 +72,8 @@ public class SettingsActivity extends AbsThemeActivity {
                 CharSequence[] entries = listPreference.getEntries();
                 listPreference.setSummary(entries[listPreference.findIndexOfValue((String) newValue)]);
 
-                getActivity().finish();
-                startActivity(getActivity().getIntent());
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
                 return true;
             };
 
@@ -126,27 +129,24 @@ public class SettingsActivity extends AbsThemeActivity {
             ListPreference simSelectionPreference = (ListPreference) findPreference(getString(R.string.pref_sim_select_key));
             simSelectionPreference.setOnPreferenceChangeListener(listChangeListener);
 
+            PermissionUtils.checkPermissionGranted(getContext(), READ_PHONE_STATE, true);
+            setupSimSelection();
+
             // Version
             findPreference(getString(R.string.pref_version_key)).setTitle(BuildConfig.VERSION_NAME);
-
-            if (!Utilities.checkPermissionsGranted(getContext(), READ_PHONE_STATE)) {
-                Utilities.askForPermission(getActivity(), READ_PHONE_STATE);
-            } else {
-                setupSimSelection();
-            }
         }
 
         @Override
         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (requestCode == Utilities.PERMISSION_RC && Utilities.checkPermissionsGranted(grantResults)) {
+            if (requestCode == PermissionUtils.PERMISSION_RC && PermissionUtils.checkPermissionsGranted(grantResults)) {
                 setupSimSelection();
             }
         }
 
         private void setupSimSelection() {
-            if (!Utilities.checkPermissionsGranted(getContext(), READ_PHONE_STATE)) {
-                Timber.w("READ_PHONE_STATE permission was not granted");
+            if (!PermissionUtils.checkPermissionGranted(getContext(), READ_PHONE_STATE, true)) {
+                Toast.makeText(getContext(), "No permission, please give permission to read phone state", Toast.LENGTH_LONG).show();
                 return;
             }
 

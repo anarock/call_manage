@@ -40,6 +40,7 @@ public class PreferenceUtils {
         mPref = PreferenceManager.getDefaultSharedPreferences(context);
         mContext = context;
 
+        sDefaultValues.put(R.string.pref_sim_select_key, context.getString(R.string.pref_sim_select_default_value));
         sDefaultValues.put(R.string.pref_app_theme_key, context.getString(R.string.pref_app_theme_default_value));
         sDefaultValues.put(R.string.pref_reject_call_timer_key, context.getString(R.string.pref_reject_call_timer_default_value));
         sDefaultValues.put(R.string.pref_answer_call_timer_key, context.getString(R.string.pref_answer_call_timer_default_value));
@@ -49,17 +50,13 @@ public class PreferenceUtils {
     }
 
     public static PreferenceUtils getInstance(Context context) {
-        if (sSharedPrefs == null) {
+        if (sSharedPrefs == null)
             sSharedPrefs = new PreferenceUtils(context.getApplicationContext());
-        }
         return sSharedPrefs;
     }
 
     public static PreferenceUtils getInstance() {
-        if (sSharedPrefs != null) {
-            return sSharedPrefs;
-        }
-
+        if (sSharedPrefs != null) return sSharedPrefs;
         throw new IllegalArgumentException("Should use getInstance(Context) at least once before using this method.");
     }
 
@@ -123,6 +120,9 @@ public class PreferenceUtils {
         mEditor = mPref.edit();
     }
 
+    /**
+     * Commit changes without considering the states
+     */
     public void commit() {
         mBulkUpdate = false;
         mEditor.commit();
@@ -131,11 +131,12 @@ public class PreferenceUtils {
 
     @SuppressLint("CommitPrefEdits")
     private void doEdit() {
-        if (!mBulkUpdate && mEditor == null) {
-            mEditor = mPref.edit();
-        }
+        if (!mBulkUpdate && mEditor == null) mEditor = mPref.edit();
     }
 
+    /**
+     * Commit changes made to the editor if there are any
+     */
     private void doCommit() {
         if (!mBulkUpdate && mEditor != null) {
             mEditor.commit();

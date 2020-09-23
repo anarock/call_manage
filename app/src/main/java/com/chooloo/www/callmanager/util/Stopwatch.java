@@ -2,19 +2,21 @@ package com.chooloo.www.callmanager.util;
 
 import java.util.Locale;
 
+/**
+ * Just a simple stopwatch class
+ */
 public class Stopwatch {
 
-    // Variables
     private long startTime = 0;
     private long stopTime = 0;
-    private boolean running = false;
+    private boolean isRunning = false;
 
     /**
      * Starts the timer
      */
     public void start() {
         this.startTime = System.currentTimeMillis();
-        this.running = true;
+        this.isRunning = true;
     }
 
     /**
@@ -22,16 +24,14 @@ public class Stopwatch {
      */
     public void stop() {
         this.stopTime = System.currentTimeMillis();
-        this.running = false;
+        this.isRunning = false;
     }
 
     /**
      * Elapsed time in milliseconds
      */
     public long getElapsedTime() {
-        if (running) {
-            return System.currentTimeMillis() - startTime;
-        }
+        if (isRunning) return System.currentTimeMillis() - startTime;
         return stopTime - startTime;
     }
 
@@ -39,9 +39,7 @@ public class Stopwatch {
      * Elapsed time in seconds
      */
     public long getElapsedTimeSecs() {
-        if (running) {
-            return ((System.currentTimeMillis() - startTime) / 1000);
-        }
+        if (isRunning) return ((System.currentTimeMillis() - startTime) / 1000);
         return ((stopTime - startTime) / 1000);
     }
 

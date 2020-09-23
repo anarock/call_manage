@@ -1,16 +1,26 @@
 package com.chooloo.www.callmanager.ui.activity;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
+import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.IntentCompat;
 
 import com.chooloo.www.callmanager.R;
 import com.chooloo.www.callmanager.util.PreferenceUtils;
 import com.chooloo.www.callmanager.util.ThemeUtils;
+
+import org.openxmlformats.schemas.drawingml.x2006.main.impl.ThemeDocumentImpl;
 
 import timber.log.Timber;
 
@@ -46,34 +56,9 @@ public abstract class AbsThemeActivity extends AppCompatActivity {
      * i had for auto detecting system theme and i really dont have time for this
      */
     protected void updateTheme() {
-
-        String theme = PreferenceUtils.getInstance(this).getString(R.string.pref_app_theme_key);
-        String color = PreferenceUtils.getInstance(this).getString(R.string.pref_app_color_key);
-
-        // If theme supposed to match device theme
-        if (theme.equals(getString(R.string.pref_system_entry_value))) {
-            theme = ThemeUtils.isNightModeOn(this) ? "dark" : "light";
-        }
-
-        Timber.i("Theme is: " + theme);
-        Timber.i("Color is: " + color);
-
-        // theme supposed to be "--theme--;--color--"
-        theme = theme + ";" + color;
-
-        int newThemeStyle = ThemeUtils.themeFromId(theme, mThemeType);
-        Timber.i("Theme updating to: " + theme);
-        boolean isInOnCreate = mThemeStyle == -1;
-
-        if (mThemeStyle != newThemeStyle) {
-            mThemeStyle = newThemeStyle;
-            setTheme(mThemeStyle);
-
-            if (!isInOnCreate) {
-                finish();
-                startActivity(getIntent());
-            }
-        }
+        setTheme(ThemeUtils.getStyleTheme(this));
+        setTheme(ThemeUtils.getTypeTheme(mThemeType));
+        setTheme(ThemeUtils.getAccentTheme(this));
     }
 
     @Override

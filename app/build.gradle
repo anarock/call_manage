@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
-        applicationId "com.chooloo.www.callmanager"
+        applicationId "com.anarock.callmanager"
         minSdkVersion 25
-        targetSdkVersion 28
-        versionCode 36
-        versionName "v0.5.1"
+        targetSdkVersion 29
+        versionCode 40
+        versionName "v0.5.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

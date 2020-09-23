@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.chooloo.www.callmanager.google;
+package com.chooloo.www.callmanager.cursorloader;
 
 import android.content.Context;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.telephony.PhoneNumberUtils;
 
 import androidx.loader.content.CursorLoader;
 
@@ -27,20 +28,25 @@ import static android.provider.ContactsContract.Contacts;
 
 public class ContactsCursorLoader extends CursorLoader {
 
-    public static String CURSOR_NAME_COLUMN = Phone.DISPLAY_NAME_PRIMARY;
-    public static String CURSOR_NUMBER_COLUMN = Phone.NUMBER;
+    // Columns
+    public static String COLUMN_ID = Contacts._ID;
+    public static String COLUMN_NAME = Contacts.DISPLAY_NAME_PRIMARY;
+    public static String COLUMN_THUMBNAIL = Contacts.PHOTO_THUMBNAIL_URI;
+    public static String COLUMN_NUMBER = Phone.NUMBER;
+    public static String COLUMN_STARRED = Phone.STARRED;
+
+    private static String CONTACTS_ORDER = Contacts.SORT_KEY_PRIMARY + " ASC";
 
     /**
      * Cursor selection string
      */
     public static final String[] CONTACTS_PROJECTION_DISPLAY_NAME_PRIMARY =
             new String[]{
-                    Phone.CONTACT_ID, // 0
-                    Phone.DISPLAY_NAME_PRIMARY, // 1
-                    Phone.PHOTO_ID, // 2
-                    Phone.PHOTO_THUMBNAIL_URI, // 3
-                    Phone.NUMBER, // 4
-                    Phone.STARRED
+                    COLUMN_ID,
+                    COLUMN_NAME,
+                    COLUMN_THUMBNAIL,
+                    COLUMN_NUMBER,
+                    COLUMN_STARRED
             };
 
     /**
@@ -54,21 +60,12 @@ public class ContactsCursorLoader extends CursorLoader {
         super(
                 context,
                 buildUri(phoneNumber, contactName),
-                getProjection(context),
+                CONTACTS_PROJECTION_DISPLAY_NAME_PRIMARY,
                 getWhere(context),
                 null,
-                getSortKey(context) + " ASC");
+                CONTACTS_ORDER);
     }
 
-    /**
-     * Returns the projection string
-     *
-     * @param context
-     * @return String
-     */
-    private static String[] getProjection(Context context) {
-        return CONTACTS_PROJECTION_DISPLAY_NAME_PRIMARY;
-    }
 
     /**
      * Get a filter string
@@ -85,9 +82,6 @@ public class ContactsCursorLoader extends CursorLoader {
                 " AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " NOT LIKE '%tachyon%'" + "))";
     }
 
-    private static String getSortKey(Context context) {
-        return Contacts.SORT_KEY_PRIMARY;
-    }
 
     /**
      * Builds contact uri by given name and phone number
@@ -97,19 +91,21 @@ public class ContactsCursorLoader extends CursorLoader {
      * @return Builder.build()
      */
     private static Uri buildUri(String phoneNumber, String contactName) {
-        Uri.Builder builder;
+        phoneNumber = PhoneNumberUtils.normalizeNumber(phoneNumber);
+        Uri.Builder builder = Phone.CONTENT_URI.buildUpon();
+
         if (phoneNumber != null && !phoneNumber.isEmpty()) {
             builder = Uri.withAppendedPath(Phone.CONTENT_FILTER_URI, Uri.encode(phoneNumber)).buildUpon();
             builder.appendQueryParameter(ContactsContract.STREQUENT_PHONE_ONLY, "true");
-        } else if (contactName != null && !contactName.isEmpty()) {
-            builder = Uri.withAppendedPath(Phone.CONTENT_FILTER_URI, Uri.encode(contactName)).buildUpon();
-            builder.appendQueryParameter(ContactsContract.PRIMARY_ACCOUNT_NAME, "true");
-        } else {
-            builder = Phone.CONTENT_URI.buildUpon();
         }
 
-        builder.appendQueryParameter(Contacts.EXTRA_ADDRESS_BOOK_INDEX, "true");
+        if (contactName != null && !contactName.isEmpty()) {
+            builder = Uri.withAppendedPath(Phone.CONTENT_FILTER_URI, Uri.encode(contactName)).buildUpon();
+            builder.appendQueryParameter(ContactsContract.PRIMARY_ACCOUNT_NAME, "true");
+        }
+
         builder.appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "true");
+        builder.appendQueryParameter(Contacts.EXTRA_ADDRESS_BOOK_INDEX, "true");
         return builder.build();
     }
 

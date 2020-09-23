@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chooloo.www.callmanager.R;
-import com.chooloo.www.callmanager.adapter.listener.OnItemClickListener;
+import com.chooloo.www.callmanager.listener.OnItemClickListener;
 import com.chooloo.www.callmanager.database.AppDatabase;
 import com.chooloo.www.callmanager.database.DataRepository;
 import com.chooloo.www.callmanager.database.entity.CGroupAndItsContacts;
@@ -46,7 +46,7 @@ public class CGroupsAdapter extends RecyclerView.Adapter<CGroupsAdapter.CGroupHo
     @NonNull
     @Override
     public CGroupHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_contact, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
         CGroupHolder holder = new CGroupHolder(view);
         return holder;
     }

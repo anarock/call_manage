@@ -3,7 +3,6 @@ package com.chooloo.www.callmanager.ui.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,7 +18,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.telecom.Call;
 import android.view.KeyEvent;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -28,6 +26,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -45,25 +44,25 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
 import com.chooloo.www.callmanager.R;
+import com.chooloo.www.callmanager.service.RecordService;
 import com.chooloo.www.callmanager.database.entity.Contact;
 import com.chooloo.www.callmanager.listener.AllPurposeTouchListener;
 import com.chooloo.www.callmanager.listener.LongClickOptionsListener;
 import com.chooloo.www.callmanager.listener.NotificationActionReceiver;
 import com.chooloo.www.callmanager.ui.fragment.DialpadFragment;
 import com.chooloo.www.callmanager.util.CallManager;
+import com.chooloo.www.callmanager.util.PermissionUtils;
 import com.chooloo.www.callmanager.util.PreferenceUtils;
 import com.chooloo.www.callmanager.util.Stopwatch;
 import com.chooloo.www.callmanager.util.ThemeUtils;
 import com.chooloo.www.callmanager.util.Utilities;
-import com.chooloo.www.callmanager.viewmodels.SharedDialViewModel;
+import com.chooloo.www.callmanager.viewmodel.SharedDialViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -72,6 +71,8 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
+import static com.chooloo.www.callmanager.service.RecordService.RECORD_SERVICE_START;
+import static com.chooloo.www.callmanager.service.RecordService.RECORD_SERVICE_STOP;
 import static com.chooloo.www.callmanager.util.BiometricUtils.showBiometricPrompt;
 
 @SuppressLint("ClickableViewAccessibility")
@@ -96,10 +97,10 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     private static String mStateText;
 
     // Fragments
-    private DialpadFragment mDialpadFragment;
+    DialpadFragment mDialpadFragment;
 
     // ViewModels
-    private SharedDialViewModel mSharedDialViewModel;
+    SharedDialViewModel mSharedDialViewModel;
 
     // BottomSheet
     BottomSheetBehavior mBottomSheetBehavior;
@@ -163,16 +164,12 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     @BindView(R.id.button_send_sms) Button mSendSmsButton;
 
     // Floating Action Buttons
-    @BindView(R.id.button_floating_reject_call_timer)
-    FloatingActionButton mFloatingRejectCallTimerButton;
-    @BindView(R.id.button_floating_answer_call_timer)
-    FloatingActionButton mFloatingAnswerCallTimerButton;
+    @BindView(R.id.button_floating_reject_call_timer) FloatingActionButton mFloatingRejectCallTimerButton;
+    @BindView(R.id.button_floating_answer_call_timer) FloatingActionButton mFloatingAnswerCallTimerButton;
     @BindView(R.id.button_floating_send_sms) FloatingActionButton mFloatingSendSMSButton;
-    @BindView(R.id.button_floating_cancel_overlay)
-    FloatingActionButton mFloatingCancelOverlayButton;
+    @BindView(R.id.button_floating_cancel_overlay) FloatingActionButton mFloatingCancelOverlayButton;
     @Nullable
-    @BindView(R.id.button_cancel_sms)
-    FloatingActionButton mFloatingCancelSMS;
+    @BindView(R.id.button_cancel_sms) FloatingActionButton mFloatingCancelSMS;
     @BindView(R.id.button_cancel_timer) FloatingActionButton mFloatingCancelTimerButton;
 
     // Layouts and overlays
@@ -188,15 +185,20 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setThemeType(ThemeUtils.TYPE_TRANSPARENT_STATUS_BAR);
-        setContentView(R.layout.activity_ongoing_call);
+
+        // set theme and view
+        setThemeType(ThemeUtils.TYPE_TRANSPARENT_STATUS_BAR); // set theme
+        setThemeType(ThemeUtils.TYPE_NO_ACTION_BAR); // remove action bar
+        setContentView(R.layout.activity_ongoing_call); // set layout
+
+        // code settings
         PreferenceUtils.getInstance(this);
         Utilities.setUpLocale(this);
-
         ButterKnife.bind(this);
 
-        // This activity needs to show even if the screen is off or locked
         Window window = getWindow();
+
+        // This activity needs to show even if the screen is off or locked
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true);
             setTurnScreenOn(true);
@@ -204,59 +206,40 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
             window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             KeyguardManager km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-            if (km != null) {
-                km.requestDismissKeyguard(this, null);
-            }
+            if (km != null) km.requestDismissKeyguard(this, null);
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         }
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        //Detect a nav bar and adapt layout accordingly
-        boolean hasNavBar = Utilities.hasNavBar(this);
-        int navBarHeight = Utilities.navBarHeight(this);
-        if (hasNavBar) {
-            mOngoingCallLayout.setPadding(0, 0, 0, navBarHeight);
-            mAnswerCallOverlay.setPadding(0, 0, 0, navBarHeight);
-            mRejectCallOverlay.setPadding(0, 0, 0, navBarHeight);
-            mDialerFrame.setPadding(0, 0, 0, navBarHeight);
-        }
-
-        // Display caller information
-        displayInformation();
+        adaptToNavbar(); // adapt layout to system's navigation bar
+        displayInformation(); // display caller information
+        setDialpadFragment(); // set a new dialpad fragment
 
         // Initiate PowerManager and WakeLock (turn screen on/off according to distance from face)
         try {
             field = PowerManager.class.getField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").getInt(null);
-        } catch (Throwable ignored) {
+            powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            wakeLock = powerManager.newWakeLock(field, getLocalClassName());
+        } catch (NoSuchFieldException | NullPointerException | IllegalAccessException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Can't use ear sensor for some reason :(", Toast.LENGTH_SHORT).show();
         }
-        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(field, getLocalClassName());
 
         // Audio Manager
         mAudioManager = (AudioManager) getApplicationContext().getSystemService(AUDIO_SERVICE);
 
-        // Dialpad Fragment
-        mDialpadFragment = DialpadFragment.newInstance(false);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.dialer_fragment, mDialpadFragment)
-                .commit();
-        mDialpadFragment.setDigitsCanBeEdited(false);
-        mDialpadFragment.setShowVoicemailButton(false);
-        mDialpadFragment.setOnKeyDownListener(this);
 
         View.OnClickListener rejectListener = v -> endCall();
         View.OnClickListener answerListener = v -> activateCall();
         LongClickOptionsListener.OverlayChangeListener overlayChangeListener = new LongClickOptionsListener.OverlayChangeListener() {
             @Override
             public boolean setOverlay(@NotNull ViewGroup view) {
-                if (mCurrentOverlay == null) {
-                    OngoingCallActivity.this.setOverlay(view);
-                    return true;
-                }
-                return false;
+                if (mCurrentOverlay != null) return false;
+                OngoingCallActivity.this.setOverlay(view);
+                return true;
             }
 
             @Override
@@ -278,12 +261,10 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
         hideButtons();
 
         // Set the correct text for the TextView
-        String rejectCallSeconds = PreferenceUtils.getInstance().getString(R.string.pref_reject_call_timer_key);
-        String rejectCallText = mRejectCallTimerText.getText() + " " + rejectCallSeconds + "s";
+        String rejectCallText = mRejectCallTimerText.getText() + " " + PreferenceUtils.getInstance().getString(R.string.pref_reject_call_timer_key) + "s";
         mRejectCallTimerText.setText(rejectCallText);
 
-        String answerCallSeconds = PreferenceUtils.getInstance().getString(R.string.pref_answer_call_timer_key);
-        String answerCallText = mAnswerCallTimerText.getText() + " " + answerCallSeconds + "s";
+        String answerCallText = mAnswerCallTimerText.getText() + " " + PreferenceUtils.getInstance().getString(R.string.pref_answer_call_timer_key) + "s";
         mAnswerCallTimerText.setText(answerCallText);
 
         // Initiate Swipe listener
@@ -345,9 +326,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
-        //Listen for call state changes
-        CallManager.registerCallback(mCallback);
+        CallManager.registerCallback(mCallback); // listen for call state changes
         updateUI(CallManager.getState());
     }
 
@@ -359,14 +338,14 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
         // In case the dialpad is opened, pressing the back button will close it
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        // You cant press the back button in order to get out of the call
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mIsCreatingUI = false;
+//        this.startService(new Intent(this, RecordService.class)
+//                .putExtra("commandType", RECORD_SERVICE_START));
     }
 
     @Override
@@ -376,14 +355,15 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
         mActionTimer.cancel();
         releaseWakeLock();
         cancelNotification();
+//        this.startService(new Intent(this, RecordService.class)
+//                .putExtra("commandType", RECORD_SERVICE_STOP));
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Utilities.PERMISSION_RC && Utilities.checkPermissionsGranted(grantResults)) {
+        if (requestCode == PermissionUtils.PERMISSION_RC && PermissionUtils.checkPermissionsGranted(grantResults))
             setSmsOverlay(mFloatingSendSMSButton);
-        }
     }
 
     @Override
@@ -404,7 +384,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Starts call timer (answer)
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_floating_answer_call_timer)
     public void startAnswerCallTimer(View view) {
@@ -416,23 +396,20 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Turns on mute according to current state (if already on/off)
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_mute)
     public void toggleMute(View view) {
         Utilities.toggleViewActivation(view);
-        if (view.isActivated()) {
-            mMuteButton.setImageResource(R.drawable.ic_mic_off_black_24dp);
-        } else {
-            mMuteButton.setImageResource(R.drawable.ic_mic_black_24dp);
-        }
+        if (view.isActivated()) mMuteButton.setImageResource(R.drawable.ic_mic_off_black_24dp);
+        else mMuteButton.setImageResource(R.drawable.ic_mic_black_24dp);
         mAudioManager.setMicrophoneMute(view.isActivated());
     }
 
     /**
      * Turns on/off the speaker according to current state (if already on/off)
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_speaker)
     public void toggleSpeaker(View view) {
@@ -443,7 +420,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Puts the call on hold
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_hold)
     public void toggleHold(View view) {
@@ -460,13 +437,12 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     //TODO add functionality to the Add call button
     @OnClick(R.id.button_add_call)
     public void addCall(View view) {
-//        CallManager.addCall(// a call);
     }
 
     /**
      * Cancel the call timer
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_cancel_timer)
     public void cancelTimer(View view) {
@@ -476,36 +452,38 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Set the sms overlay (from which you can send sms)
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_floating_send_sms)
     public void setSmsOverlay(View view) {
-        if (Utilities.checkPermissionsGranted(this, Manifest.permission.SEND_SMS)) {
+        if (PermissionUtils.checkPermissionGranted(this, Manifest.permission.SEND_SMS, true)) {
             setOverlay(mSendSmsOverlay);
             mSendSmsButton.setVisibility(View.VISIBLE);
             mSendSmsOverlay.setOnTouchListener(mSmsOverlaySwipeListener);
-        } else {
-            Utilities.askForPermission(this, Manifest.permission.SEND_SMS);
         }
     }
 
     /**
      * Send sms
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_send_sms)
     public void sendSMS(View view) {
-        String msg = mEditSms.getText().toString();
-        String phoneNum = CallManager.getDisplayContact(this).getMainPhoneNumber();
-        Utilities.sendSMS(this, phoneNum, msg);
-        removeOverlay();
+        if (mEditSms.getText() != null) {
+            String number = CallManager.getDisplayContact(this).getMainPhoneNumber();
+            String text = mEditSms.getText().toString();
+            Utilities.sendSMS(this, number, text);
+            removeOverlay();
+        } else {
+            Toast.makeText(this, "Enter an sms first", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
      * Cancel sms overlay
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick(R.id.button_cancel_sms)
     public void cancelSMS(View view) {
@@ -515,15 +493,16 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Changes the color of the icon according to button status (activated or not)
      *
-     * @param view
+     * @param view the clicked view
      */
     @OnClick({R.id.button_speaker, R.id.button_hold, R.id.button_mute})
     public void changeColors(View view) {
         ImageView imageButton = (ImageView) view;
-        if (view.isActivated())
-            imageButton.setColorFilter(getResources().getColor(R.color.white));
-        else
-            imageButton.setColorFilter(getResources().getColor(R.color.soft_black));
+        if (view.isActivated()) {
+            imageButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+        } else {
+            imageButton.setColorFilter(ContextCompat.getColor(this, R.color.soft_black));
+        }
     }
 
     // -- Call Actions -- //
@@ -554,28 +533,17 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
 
     // -- UI -- //
 
+    /**
+     * Display the information about the caller
+     */
     private void displayInformation() {
-        // Display the information about the caller
         Contact callerContact = CallManager.getDisplayContact(this);
         String callerName = callerContact.getName();
-
-        if (!callerName.isEmpty()) {
-
-            // Try decoding it just in case
-            try {
-                callerName = java.net.URLDecoder.decode(callerContact.getName(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                // The name cant be decoded so its probably not needed anyway
-            }
-
-            if (callerName != null) mCallerText.setText(callerName);
-            if (callerContact.getPhotoUri() != null) {
-                mPlaceholderImage.setVisibility(View.INVISIBLE);
-                mPhotoImage.setVisibility(View.VISIBLE);
-                mPhotoImage.setImageURI(Uri.parse(callerContact.getPhotoUri()));
-            }
-        } else {
-            mCallerText.setText(callerContact.getMainPhoneNumber());
+        mCallerText.setText(callerName);
+        if (callerContact.getPhotoUri() != null) {
+            mPlaceholderImage.setVisibility(View.INVISIBLE);
+            mPhotoImage.setVisibility(View.VISIBLE);
+            mPhotoImage.setImageURI(Uri.parse(callerContact.getPhotoUri()));
         }
     }
 
@@ -616,6 +584,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
         mState = state;
         mStateText = getResources().getString(statusTextRes);
         mBuilder.setContentText(mStateText);
+
         try {
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
         } catch (NullPointerException e) {
@@ -646,7 +615,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
         mMuteButton.setVisibility(View.VISIBLE);
         mKeypadButton.setVisibility(View.VISIBLE);
         mSpeakerButton.setVisibility(View.VISIBLE);
-        mAddCallButton.setVisibility(View.VISIBLE);
+//        mAddCallButton.setVisibility(View.VISIBLE);
         moveRejectButtonToMiddle();
     }
 
@@ -686,7 +655,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Sets the action button (call actions) as clickable/not clickable
      *
-     * @param clickable
+     * @param clickable is clickable
      */
     private void setActionButtonsClickable(boolean clickable) {
         for (int i = 0; i < mOngoingCallLayout.getChildCount(); i++) {
@@ -702,11 +671,11 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
      * Hide all buttons
      */
     private void hideButtons() {
-        // hide buttons
         mFloatingRejectCallTimerButton.hide();
         mFloatingAnswerCallTimerButton.hide();
         mFloatingCancelOverlayButton.hide();
         mFloatingSendSMSButton.hide();
+        assert mFloatingCancelSMS != null;
         mFloatingCancelSMS.hide();
         mFloatingCancelTimerButton.hide();
         mSendSmsButton.setVisibility(View.GONE);
@@ -750,12 +719,10 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Set a given overlay as visible
      *
-     * @param overlay
+     * @param overlay the overlay to set
      */
     private void setOverlay(@NotNull ViewGroup overlay) {
-        if (mCurrentOverlay != null) {
-            removeOverlay(mCurrentOverlay);
-        }
+        if (mCurrentOverlay != null) removeOverlay(mCurrentOverlay);
         setActionButtonsClickable(false);
 
         mCurrentOverlay = overlay;
@@ -768,14 +735,13 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     /**
      * Removes a given overlay as visible
      *
-     * @param overlay
+     * @param overlay the overlay to remove
      */
     private void removeOverlay(@NotNull ViewGroup overlay) {
         if (overlay == mCurrentOverlay) {
             setActionButtonsClickable(true);
             //Animate fade, and then 'remove' the overlay
-            overlay.animate()
-                    .alpha(0.0f);
+            overlay.animate().alpha(0.0f);
 
             mCurrentOverlay.setOnTouchListener(null);
             mCurrentOverlay = null;
@@ -787,9 +753,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
      * Removes the current overlay as the visible overlay
      */
     private void removeOverlay() {
-        if (mCurrentOverlay != null) {
-            removeOverlay(mCurrentOverlay);
-        }
+        if (mCurrentOverlay != null) removeOverlay(mCurrentOverlay);
     }
 
 
@@ -799,18 +763,14 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
      * Acquires the wake lock
      */
     private void acquireWakeLock() {
-        if (!wakeLock.isHeld()) {
-            wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
-        }
+        if (!wakeLock.isHeld()) wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
     }
 
     /**
      * Releases the wake lock
      */
     private void releaseWakeLock() {
-        if (wakeLock.isHeld()) {
-            wakeLock.release();
-        }
+        if (wakeLock.isHeld()) wakeLock.release();
     }
 
     // -- Classes -- //
@@ -819,6 +779,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
 
         CountDownTimer mTimer = null;
         boolean mIsRejecting = true;
+        boolean mIsActionTimerEnable = false;
 
         Integer oldVolume;
 
@@ -856,31 +817,30 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
         }
 
         private void start() {
+            mIsActionTimerEnable = true;
             oldVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
             mAudioManager.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
             if (mTimer != null) mTimer.start();
-            else Timber.w("Couldn't start action timer (timer is null)");
-
+            else
+                Toast.makeText(getApplicationContext(), "Couldn't start action timer (timer is null)", Toast.LENGTH_LONG).show();
             if (mActionTimerOverlay != null) setOverlay(mActionTimerOverlay);
         }
 
         private void cancel() {
             if (mTimer != null) mTimer.cancel();
-            else Timber.w("Couldn't cancel action timer (timer is null)");
-
             finalEndCommonMan();
         }
 
         private void end() {
             if (mIsRejecting) endCall();
             else activateCall();
-
             finalEndCommonMan();
         }
 
         private void finalEndCommonMan() {
-            if (oldVolume != null)
+            if (mIsActionTimerEnable)
                 mAudioManager.setStreamVolume(AudioManager.STREAM_RING, oldVolume, 0);
+            mIsActionTimerEnable = false;
             removeOverlay();
         }
     }
@@ -921,7 +881,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
     @SuppressLint("HandlerLeak")
     class CallTimeHandler extends Handler {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NotNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case TIME_START:
@@ -1002,6 +962,7 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             mNotificationManager = getSystemService(NotificationManager.class);
+            assert mNotificationManager != null;
             mNotificationManager.createNotificationChannel(channel);
         }
     }
@@ -1010,9 +971,35 @@ public class OngoingCallActivity extends AbsThemeActivity implements DialpadFrag
      * Removes the notification
      */
     public void cancelNotification() {
-        String ns = this.NOTIFICATION_SERVICE;
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(ns);
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        assert notificationManager != null;
         notificationManager.cancel(NOTIFICATION_ID);
     }
 
+    /**
+     * detect a nav bar and adapt layout accordingly
+     */
+    private void adaptToNavbar() {
+        boolean hasNavBar = Utilities.hasNavBar(this);
+        int navBarHeight = Utilities.navBarHeight(this);
+        if (hasNavBar) {
+            mOngoingCallLayout.setPadding(0, 0, 0, navBarHeight);
+            mAnswerCallOverlay.setPadding(0, 0, 0, navBarHeight);
+            mRejectCallOverlay.setPadding(0, 0, 0, navBarHeight);
+            mDialerFrame.setPadding(0, 0, 0, navBarHeight);
+        }
+    }
+
+    /**
+     * Set a new dialpad fragment
+     */
+    private void setDialpadFragment() {
+        mDialpadFragment = DialpadFragment.newInstance(false);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.dialer_fragment, mDialpadFragment)
+                .commit();
+        mDialpadFragment.setDigitsCanBeEdited(false);
+        mDialpadFragment.setShowVoicemailButton(false);
+        mDialpadFragment.setOnKeyDownListener(this);
+    }
 }

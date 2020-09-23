@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.chooloo.www.callmanager.R;
 import com.chooloo.www.callmanager.ui.fragment.base.AbsBaseFragment;
-import com.chooloo.www.callmanager.viewmodels.SharedSearchViewModel;
+import com.chooloo.www.callmanager.viewmodel.SharedSearchViewModel;
 
 import butterknife.BindView;
 
@@ -63,16 +63,9 @@ public class SearchBarFragment extends AbsBaseFragment {
             }
         };
         mSearchInput.addTextChangedListener(mTextWatcher);
-
-        mSearchInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    mSearchViewModel.setIsFocused(true);
-                } else {
-                    mSearchViewModel.setIsFocused(false);
-                }
-            }
+        mSearchInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) mSearchViewModel.setIsFocused(true);
+            else mSearchViewModel.setIsFocused(false);
         });
     }
 

@@ -1,4 +1,21 @@
 <resources>
+    <!-- Arrays -->
+    <string name="contacts">Contacts</string>
+    <string name="recents">Recents</string>
+    <string name="excel">Excel</string>
+
+    <!-- Colors -->
+    <string name="color_blue">Blue</string>
+    <string name="color_pink">Pinkish</string>
+    <string name="color_green">Greenish</string>
+    <string name="color_cream">Creamish</string>
+
+    <!-- Themes -->
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_amoled">AMOLED</string>
+    <string name="theme_auto">System Default</string>
+
     <string name="app_name">Sales Connect</string>
     <string name="support_email">choolookulu@gmail.com</string>
     <string name="app_source_url">https://github.com/Chooloo/call_manage</string>
@@ -72,7 +89,6 @@
     <string name="pref_system_entry_value">system</string>
 
     <string name="pref_version_key">version</string>
-    <!--Arguments-->
 
     <!--Call State-->
     <string name="status_call_disconnected">Call ended</string>
@@ -99,11 +115,19 @@
     <string name="dialog_changelog_title">Changelog</string>
 
     <!--Empty-->
+    <string name="no_matches_to_search">No search matches</string>
+
     <string name="empty_cgroups_title">Nothing here… yet</string>
     <string name="empty_cgroups_desc">You can try to add something</string>
 
     <string name="empty_contact_title">No contact matching search query found</string>
     <string name="empty_contact_desc" />
+
+    <string name="empty_contact_persmission_title">No contacts permissions</string>
+    <string name="empty_contact_persmission_desc">Enable permission to access contacts</string>
+
+    <string name="empty_recents_persmission_title">No Recents permissions</string>
+    <string name="empty_recents_persmission_desc">Enable call log to access recents</string>
 
     <string name="empty_recents_title">No recent calls</string>
     <string name="empty_recents_desc" />
@@ -174,6 +198,7 @@
     <string name="action_hangup">Hang Up</string>
 
     <!-- Buttons -->
+    <string name="enable_permission">Enable Permission</string>
     <string name="button_enable_contact_permission">Enable contacts</string>
     <string name="button_enable_recents_permission">Enable Call Log</string>
 
