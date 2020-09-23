@@ -17,7 +17,7 @@
         <item name="dialogBackgroundColor">?attr/colorPrimary</item>
 
         <item name="android:windowBackground">?attr/colorPrimary</item>
-<!--        <item name="android:navigationBarColor">?attr/colorPrimary</item>-->
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
 
@@ -39,7 +39,7 @@
 
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">?attr/colorPrimary</item>
-<!--        <item name="android:navigationBarColor">?attr/colorPrimary</item>-->
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="dialogBackgroundColor">@color/grey_800</item>
 
@@ -63,6 +63,11 @@
     <!-- Accent Colors -->
 
     <style name="Accent"></style>
+
+    <style name="Accent.Violet">
+        <item name="colorAccent">@color/color_accent_violet</item>
+        <item name="secondaryAccentColor">?attr/colorAccent</item>
+    </style>
 
     <style name="Accent.Blue">
         <item name="colorAccent">@color/color_accent_blue</item>
