@@ -3,7 +3,6 @@
 
     <!-- App Theme Preferences -->
     <string-array name="pref_app_color_entries">
-        <item>@string/color_violet</item>
         <item>@string/color_blue</item>
         <item>@string/color_pink</item>
         <item>@string/color_green</item>
@@ -18,7 +17,6 @@
     </string-array>
 
     <string-array name="pref_app_color_entry_values">
-        <item>violet</item>
         <item>blue</item>
         <item>pink</item>
         <item>green</item>
@@ -50,7 +48,7 @@
     <string-array name="pref_default_page_entries">
         <item>@string/recents</item>
         <item>@string/contacts</item>
-<!--        <item>@string/excel</item>-->
+        <item>@string/excel</item>	
     </string-array>
 
     <string-array name="pref_default_page_entry_values">

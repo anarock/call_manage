@@ -36,11 +36,10 @@ public class ThemeUtils {
     private static final String STYLE_SYSTEM = "system";
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ACCENT_VIOLET, ACCENT_BLUE, ACCENT_PINK, ACCENT_GREEN, ACCENT_CREAM})
+    @StringDef({ACCENT_BLUE, ACCENT_PINK, ACCENT_GREEN, ACCENT_CREAM})
     private @interface AccentColor {
     }
 
-    private static final String ACCENT_VIOLET = "violet";
     private static final String ACCENT_BLUE = "blue";
     private static final String ACCENT_PINK = "pink";
     private static final String ACCENT_GREEN = "green";
@@ -106,8 +105,6 @@ public class ThemeUtils {
         @AccentColor String color = PreferenceUtils.getInstance(context).getString(R.string.pref_app_color_key);
         if (color == null) return DEFAULT_ACCENT;
         switch (color) {
-            case ACCENT_VIOLET:
-                return R.style.Accent_Violet;
             case ACCENT_BLUE:
                 return R.style.Accent_Blue;
             case ACCENT_PINK:

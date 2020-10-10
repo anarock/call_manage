@@ -14,6 +14,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
+import com.chooloo.www.callmanager.BuildConfig;
 import com.chooloo.www.callmanager.R;
 import com.chooloo.www.callmanager.ui.activity.MainActivity;
 import com.chooloo.www.callmanager.util.PermissionUtils;
@@ -74,11 +75,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         };
 
-//        // App Color
-//        ListPreference appColorPreference = (ListPreference) findPreference(getString(R.string.pref_app_color_key));
-//        appColorPreference.setOnPreferenceChangeListener(colorChangeListener);
-//        appColorPreference.setSummary(appColorPreference.getEntry());
-
         // App theme
         ListPreference appThemePreference = (ListPreference) findPreference(getString(R.string.pref_app_theme_key));
         appThemePreference.setOnPreferenceChangeListener(themeChangeListener);
@@ -99,10 +95,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         defaultPagePreference.setOnPreferenceChangeListener(listChangeListener);
         defaultPagePreference.setSummary(defaultPagePreference.getEntry());
 
-//        // Excel enable selection
-//        CheckBoxPreference excelEnablePreference = (CheckBoxPreference) findPreference(getString(R.string.pref_excel_enable_key));
-//        excelEnablePreference.setOnPreferenceChangeListener(excelEnableChangeListener);
-
         // Biometrics
         SwitchPreference isBiometricPreference = (SwitchPreference) findPreference(getString(R.string.pref_is_biometric_key));
         isBiometricPreference.setOnPreferenceChangeListener(switchChangeListener);
@@ -113,6 +105,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         PermissionUtils.checkPermissionsGranted(getContext(), new String[]{READ_PHONE_STATE}, true);
         setupSimSelection();
+
+        // Version
+        findPreference(getString(R.string.pref_version_key)).setTitle(BuildConfig.VERSION_NAME);
     }
 
     @Override

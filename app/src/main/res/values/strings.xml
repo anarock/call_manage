@@ -5,7 +5,6 @@
     <string name="excel">Excel</string>
 
     <!-- Colors -->
-    <string name="color_violet" translatable="false">Violet</string>
     <string name="color_blue">Blue</string>
     <string name="color_pink">Pinkish</string>
     <string name="color_green">Greenish</string>

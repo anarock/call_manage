@@ -114,7 +114,6 @@ public class MainActivity extends AbsSearchBarActivity {
 
         // checks
         PermissionUtils.checkDefaultDialer(this);
-        showNewVersionDialog();
 
         // View Pager
         mAdapterViewPager = new CustomPagerAdapter(this, getSupportFragmentManager());
@@ -228,11 +227,6 @@ public class MainActivity extends AbsSearchBarActivity {
                 startActivity(intent);
                 return true;
             }
-//            case R.id.action_about: {
-//                Intent intent = new Intent(this, AboutActivity.class);
-//                startActivity(intent);
-//                return true;
-//            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -379,7 +373,7 @@ public class MainActivity extends AbsSearchBarActivity {
     private void showNewVersionDialog() {
         if (PreferenceUtils.getInstance().getInt(R.string.pref_last_version_key) < BuildConfig.VERSION_CODE) {
             PreferenceUtils.getInstance().putInt(R.string.pref_last_version_key, BuildConfig.VERSION_CODE);
-//            new ChangelogDialog().show(getSupportFragmentManager(), TAG_CHANGELOG_DIALOG);
+            new ChangelogDialog().show(getSupportFragmentManager(), TAG_CHANGELOG_DIALOG);
         }
     }
 
