@@ -7,13 +7,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
-    android:stretchColumns="*">
+    android:stretchColumns="*"
+    android:background="?attr/colorPrimary">
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.anarock.callmanager.ui.widgets.DialpadKeyButton
+        <com.chooloo.www.callmanager.ui.widgets.DialpadKeyButton
             android:id="@+id/key_1"
             style="@style/DialpadKey">
 
@@ -36,7 +37,7 @@
 
             </LinearLayout>
 
-        </com.anarock.callmanager.ui.widgets.DialpadKeyButton>
+        </com.chooloo.www.callmanager.ui.widgets.DialpadKeyButton>
 
         <include
             android:id="@+id/key_2"
