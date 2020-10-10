@@ -3,6 +3,7 @@ package com.chooloo.www.callmanager.ui.fragment;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -31,12 +32,15 @@ import com.chooloo.www.callmanager.database.entity.Contact;
 import com.chooloo.www.callmanager.cursorloader.FavoritesAndContactsLoader;
 import com.chooloo.www.callmanager.ui.FABCoordinator;
 import com.chooloo.www.callmanager.ui.ListItemHolder;
+import com.chooloo.www.callmanager.ui.activity.ContactActivity;
 import com.chooloo.www.callmanager.ui.activity.MainActivity;
 import com.chooloo.www.callmanager.ui.fragment.base.AbsCursorFragment;
 import com.chooloo.www.callmanager.util.CallManager;
 import com.chooloo.www.callmanager.util.ContactUtils;
 import com.chooloo.www.callmanager.util.PermissionUtils;
 import com.chooloo.www.callmanager.util.Utilities;
+
+import java.io.Serializable;
 
 import timber.log.Timber;
 
@@ -45,8 +49,6 @@ import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class ContactsFragment extends AbsCursorFragment implements
-        FABCoordinator.FABDrawableCoordination,
-        FABCoordinator.OnFABClickListener,
         OnItemClickListener,
         OnItemLongClickListener {
 
@@ -58,6 +60,12 @@ public class ContactsFragment extends AbsCursorFragment implements
         mRequiredPermissions = REQUIRED_PERMISSIONS;
     }
 
+    public ContactsFragment(Context context, String phoneNumber, String contactName) {
+        super(context, phoneNumber, contactName);
+        mAdapter = new ContactsAdapter(mContext, null, this, this);
+        mRequiredPermissions = REQUIRED_PERMISSIONS;
+    }
+
     @Override
     protected void onFragmentReady() {
         if (!PermissionUtils.checkPermissionsGranted(mContext, mRequiredPermissions, false)) {
@@ -65,6 +73,7 @@ public class ContactsFragment extends AbsCursorFragment implements
             this.mEmptyDesc.setText(R.string.empty_contact_persmission_desc);
         }
         super.onFragmentReady();
+        load(null, null);
     }
 
     /*
@@ -111,35 +120,18 @@ public class ContactsFragment extends AbsCursorFragment implements
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         String contactName = args != null && args.containsKey(ARG_CONTACT_NAME) ? args.getString(ARG_CONTACT_NAME) : null;
         String phoneNumber = args != null && args.containsKey(ARG_PHONE_NUMBER) ? args.getString(ARG_PHONE_NUMBER) : null;
-        return new FavoritesAndContactsLoader(mContext, phoneNumber, contactName);
+
+        boolean withFavs = (contactName == null || contactName.isEmpty()) && (phoneNumber == null || phoneNumber.isEmpty());
+        return new FavoritesAndContactsLoader(mContext, phoneNumber, contactName, withFavs);
     }
 
     @Override
     public void onItemClick(RecyclerView.ViewHolder holder, Object data) {
-        Contact contact = (Contact) data;
-        showContactPopup(contact);
+        openContactActivity((Contact) data);
     }
 
     @Override
     public void onItemLongClick(RecyclerView.ViewHolder holder, Object data) {
-    }
-
-    @Override
-    public void onRightClick() {
-        ((MainActivity) getActivity()).expandDialer(true);
-    }
-
-    @Override
-    public void onLeftClick() {
-        ((MainActivity) getActivity()).toggleSearchBar();
-    }
-
-    @Override
-    public int[] getIconsResources() {
-        return new int[]{
-                R.drawable.ic_dialpad_black_24dp,
-                R.drawable.ic_search_black_24dp
-        };
     }
 
     private ListItemHolder getContactHolder(int position) {
@@ -147,111 +139,13 @@ public class ContactsFragment extends AbsCursorFragment implements
     }
 
     /**
-     * Shows a pop up window (dialog) with the contact's information
+     * Open a contact activity with a given contact
      *
-     * @param contact
+     * @param contact contact to pass into the contact activity
      */
-    private void showContactPopup(Contact contact) {
-
-        // Initiate the dialog
-        Dialog contactDialog = new Dialog(mContext);
-        contactDialog.setContentView(R.layout.contact_popup_view);
-
-        // Views declarations
-        ConstraintLayout popupLayout;
-        TextView contactName, contactNumber, contactDate;
-        ImageView contactPhoto, contactPhotoPlaceholder;
-        ImageButton callButton, editButton, deleteButton, infoButton, addButton, smsButton, favButton;
-
-        popupLayout = contactDialog.findViewById(R.id.contact_popup_layout);
-
-        contactPhoto = contactDialog.findViewById(R.id.contact_popup_photo);
-        contactPhotoPlaceholder = contactDialog.findViewById(R.id.contact_popup_photo_placeholder);
-
-        contactName = contactDialog.findViewById(R.id.contact_popup_name);
-        contactNumber = contactDialog.findViewById(R.id.contact_popup_number);
-        contactDate = contactDialog.findViewById(R.id.contact_popup_date);
-
-        callButton = contactDialog.findViewById(R.id.contact_popup_button_call);
-        editButton = contactDialog.findViewById(R.id.contact_popup_button_edit);
-        deleteButton = contactDialog.findViewById(R.id.contact_popup_button_delete);
-        infoButton = contactDialog.findViewById(R.id.contact_popup_button_info);
-        addButton = contactDialog.findViewById(R.id.contact_popup_button_add);
-        smsButton = contactDialog.findViewById(R.id.contact_popup_button_sms);
-        favButton = contactDialog.findViewById(R.id.contact_popup_button_fav);
-
-        if (contact.getName() != null) {
-            contactName.setText(contact.getName());
-            contactNumber.setText(Utilities.formatPhoneNumber(contact.getMainPhoneNumber()));
-            infoButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.VISIBLE);
-            if (contact.getIsFavorite())
-                favButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_black_24dp));
-        } else {
-            infoButton.setVisibility(View.GONE);
-            editButton.setVisibility(View.GONE);
-            addButton.setVisibility(View.VISIBLE);
-            contactName.setText(Utilities.formatPhoneNumber(contact.getMainPhoneNumber()));
-            contactNumber.setVisibility(View.GONE);
-        }
-
-        if (contact.getPhotoUri() == null || contact.getPhotoUri().isEmpty()) {
-            contactPhoto.setVisibility(View.GONE);
-            contactPhotoPlaceholder.setVisibility(View.VISIBLE);
-        } else {
-            contactPhoto.setVisibility(View.VISIBLE);
-            contactPhotoPlaceholder.setVisibility(View.GONE);
-            contactPhoto.setImageURI(Uri.parse(contact.getPhotoUri()));
-        }
-
-        callButton.setOnClickListener(v -> {
-            Timber.i("MAIN PHONE NUMBER: " + contact.getMainPhoneNumber());
-            CallManager.call(getActivity(), contact.getMainPhoneNumber());
-        });
-
-        editButton.setOnClickListener(v -> {
-            ContactUtils.openContactToEdit(getActivity(), contact.getContactId());
-        });
-
-        infoButton.setOnClickListener(v -> {
-            ContactUtils.openContact(getActivity(), contact.getContactId());
-        });
-
-        smsButton.setOnClickListener(v -> {
-            Utilities.openSmsWithNumber(getActivity(), contact.getMainPhoneNumber());
-        });
-
-        favButton.setOnClickListener(v -> {
-            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                if (contact.getIsFavorite()) {
-                    contact.setIsFavorite(false);
-                    favButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_outline_black_24dp));
-                    ContactUtils.setContactIsFavorite(getActivity(), Long.toString(contact.getContactId()), false);
-                } else {
-                    contact.setIsFavorite(true);
-                    favButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_black_24dp));
-                    ContactUtils.setContactIsFavorite(getActivity(), Long.toString(contact.getContactId()), true);
-                }
-            } else {
-                PermissionUtils.askForPermission(getActivity(), WRITE_CONTACTS);
-                Toast.makeText(mContext, "I dont have the permission to do that :(", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        deleteButton.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_CONTACTS) == PERMISSION_GRANTED) {
-                ContactUtils.deleteContact(getActivity(), contact.getContactId());
-                contactDialog.dismiss();
-            } else {
-                Toast.makeText(mContext, "I dont have the permission", Toast.LENGTH_LONG).show();
-                contactDialog.dismiss();
-            }
-        });
-
-        popupLayout.setElevation(20);
-
-        contactDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        contactDialog.show();
-
+    private void openContactActivity(Contact contact) {
+        Intent contactLayoutIntent = new Intent(mContext, ContactActivity.class);
+        contactLayoutIntent.putExtra(ContactActivity.CONTACT_INTENT_ID, contact);
+        startActivity(contactLayoutIntent);
     }
 }

@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     tools:context=".ui.fragment.DialpadFragment">
 
@@ -16,13 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/shadow_length"
         android:alpha="0.04"
-        android:background="@drawable/shadow_fade_up"
-        android:backgroundTint="@android:color/transparent" />
+        android:background="@drawable/shadow_fade_up" />
 
     <!-- Number Input Field -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/phone_number_input_height"
+        android:background="?attr/colorPrimary"
         android:orientation="horizontal"
         android:paddingStart="@dimen/top_dialpad_side_padding"
         android:paddingEnd="@dimen/top_dialpad_side_padding">
@@ -49,6 +48,7 @@
             android:focusableInTouchMode="true"
             android:freezesText="true"
             android:gravity="center"
+            android:inputType="phone"
             android:maxLines="1"
             android:scrollHorizontally="true"
             android:singleLine="true"

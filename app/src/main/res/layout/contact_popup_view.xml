@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/caller_image_layout"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
@@ -57,17 +57,20 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:ellipsize="end"
         android:gravity="center"
+        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frameLayout"
+        app:layout_constraintTop_toBottomOf="@id/caller_image_layout"
         tools:text="Jesus" />
 
     <TextView
         android:id="@+id/contact_popup_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintEnd_toEndOf="parent"

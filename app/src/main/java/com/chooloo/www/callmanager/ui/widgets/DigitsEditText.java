@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.chooloo.www.callmanager.util.Utilities;
+
 public class DigitsEditText extends AppCompatEditText {
 
     public DigitsEditText(Context context, AttributeSet attrs) {
@@ -37,5 +39,13 @@ public class DigitsEditText extends AppCompatEditText {
             imm.hideSoftInputFromWindow(getApplicationWindowToken(), 0);
         }
         return ret;
+    }
+
+    public boolean isEmpty() {
+        return this.length() == 0;
+    }
+
+    public String getNumbers() {
+        return Utilities.getOnlyNumbers(this.getText().toString());
     }
 }

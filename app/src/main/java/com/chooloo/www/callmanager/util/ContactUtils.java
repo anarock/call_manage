@@ -21,6 +21,7 @@ import timber.log.Timber;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static com.chooloo.www.callmanager.util.PermissionUtils.checkPermissionsGranted;
 
 public class ContactUtils {
 
@@ -41,14 +42,11 @@ public class ContactUtils {
         // if phone number is empty, it's a private number
         if (phoneNumber.isEmpty() && (name == null || name.isEmpty())) return PRIVATE;
         // check for read contacts permission, ask for it if necessary
-        if (!PermissionUtils.checkPermissionGranted(context, READ_CONTACTS, true)) return UNKNOWN;
+        if (!checkPermissionsGranted(context, new String[]{READ_CONTACTS}, true)) return UNKNOWN;
         // initiate contact cursor
         Cursor cursor = new ContactsCursorLoader(context, phoneNumber, name).loadInBackground();
         // handle null cursor
-        if (cursor == null || cursor.getCount() == 0) {
-            if (name == null) name = phoneNumber;
-            return new Contact(name, phoneNumber);
-        }
+        if (cursor == null || cursor.getCount() == 0) return new Contact(name, phoneNumber);
         // cursor isn't empty, get the first result
         cursor.moveToFirst();
         return new Contact(cursor);
@@ -140,7 +138,7 @@ public class ContactUtils {
     public static void setContactIsFavorite(Activity activity, String contactId, boolean isSetFavorite) {
         try {
             int num = isSetFavorite ? 1 : 0; // convert boolean to num
-            if (PermissionUtils.checkPermissionGranted(activity, WRITE_CONTACTS, true)) {
+            if (PermissionUtils.checkPermissionsGranted(activity, new String[]{WRITE_CONTACTS}, true)) {
                 ContentValues v = new ContentValues();
                 v.put(ContactsContract.Contacts.STARRED, num);
                 activity.getContentResolver().update(ContactsContract.Contacts.CONTENT_URI, v, ContactsContract.Contacts._ID + "=?", new String[]{contactId + ""});

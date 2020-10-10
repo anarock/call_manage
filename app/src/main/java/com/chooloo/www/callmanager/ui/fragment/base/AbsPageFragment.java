@@ -1,15 +1,15 @@
 package com.chooloo.www.callmanager.ui.fragment.base;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.chooloo.www.callmanager.R;
+import com.chooloo.www.callmanager.ui.FABCoordinator;
 import com.chooloo.www.callmanager.ui.activity.MainActivity;
 
-import butterknife.BindView;
+public abstract class AbsPageFragment extends AbsBaseFragment implements
+        FABCoordinator.FABDrawableCoordination,
+        FABCoordinator.OnFABClickListener {
 
-public abstract class AbsRecyclerViewFragment extends AbsBaseFragment {
-
-    @BindView(R.id.recycler_view) public RecyclerView mRecyclerView;
+    @Override
+    protected void onFragmentReady() {
+    }
 
     @Override
     public void onResume() {

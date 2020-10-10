@@ -35,22 +35,32 @@ import com.chooloo.www.callmanager.ui.fragment.base.AbsCursorFragment;
 import com.chooloo.www.callmanager.util.CallManager;
 import com.chooloo.www.callmanager.util.ContactUtils;
 import com.chooloo.www.callmanager.util.PermissionUtils;
+import com.chooloo.www.callmanager.util.PhoneNumberUtils;
 import com.chooloo.www.callmanager.util.Utilities;
+
+import timber.log.Timber;
 
 import static android.Manifest.permission.READ_CALL_LOG;
 import static android.Manifest.permission.WRITE_CALL_LOG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class RecentsFragment extends AbsCursorFragment implements
-        FABCoordinator.FABDrawableCoordination,
-        FABCoordinator.OnFABClickListener,
         OnItemClickListener,
         OnItemLongClickListener {
 
     public static final String[] REQUIRED_PERMISSIONS = {READ_CALL_LOG, WRITE_CALL_LOG};
 
+    private String mPhoneNumber = null;
+    private String mContactName = null;
+
     public RecentsFragment(Context context) {
         super(context);
+        mAdapter = new RecentsAdapter(mContext, null, this, this);
+        mRequiredPermissions = REQUIRED_PERMISSIONS;
+    }
+
+    public RecentsFragment(Context context, String phoneNumber, String contactName) {
+        super(context, phoneNumber, contactName);
         mAdapter = new RecentsAdapter(mContext, null, this, this);
         mRequiredPermissions = REQUIRED_PERMISSIONS;
     }
@@ -74,6 +84,7 @@ public class RecentsFragment extends AbsCursorFragment implements
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         String contactName = args != null && args.containsKey(ARG_CONTACT_NAME) ? args.getString(ARG_CONTACT_NAME) : null;
         String phoneNumber = args != null && args.containsKey(ARG_PHONE_NUMBER) ? args.getString(ARG_PHONE_NUMBER) : null;
+
         return new RecentsCursorLoader(getContext(), phoneNumber, contactName);
     }
 
@@ -85,24 +96,6 @@ public class RecentsFragment extends AbsCursorFragment implements
 
     @Override
     public void onItemLongClick(RecyclerView.ViewHolder holder, Object data) {
-    }
-
-    @Override
-    public void onRightClick() {
-        ((MainActivity) getActivity()).expandDialer(true);
-    }
-
-    @Override
-    public void onLeftClick() {
-        ((MainActivity) getActivity()).toggleSearchBar();
-    }
-
-    @Override
-    public int[] getIconsResources() {
-        return new int[]{
-                R.drawable.ic_dialpad_black_24dp,
-                R.drawable.ic_search_black_24dp
-        };
     }
 
     /**
@@ -147,7 +140,7 @@ public class RecentsFragment extends AbsCursorFragment implements
 
         if (contact.getName() != null) {
             contactName.setText(contact.getName());
-            contactNumber.setText(Utilities.formatPhoneNumber(contact.getMainPhoneNumber()));
+            contactNumber.setText(PhoneNumberUtils.formatPhoneNumber(mContext, contact.getMainPhoneNumber()));
             infoButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
             if (contact.getPhotoUri() == null || contact.getPhotoUri().isEmpty()) {
@@ -162,7 +155,7 @@ public class RecentsFragment extends AbsCursorFragment implements
             infoButton.setVisibility(View.GONE);
             editButton.setVisibility(View.GONE);
             addButton.setVisibility(View.VISIBLE);
-            contactName.setText(Utilities.formatPhoneNumber(contact.getMainPhoneNumber()));
+            contactName.setText(PhoneNumberUtils.formatPhoneNumber(mContext, contact.getMainPhoneNumber()));
             contactNumber.setVisibility(View.GONE);
 
             contactPhoto.setVisibility(View.GONE);
@@ -201,12 +194,12 @@ public class RecentsFragment extends AbsCursorFragment implements
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_CALL_LOG) == PERMISSION_GRANTED) {
                 String queryString = "_ID=" + recentCall.getCallId();
                 getActivity().getContentResolver().delete(CallLog.Calls.CONTENT_URI, queryString, null);
-                tryRunningLoader();
+                load(null, null);
                 Toast.makeText(mContext, "Call log deleted", Toast.LENGTH_SHORT).show();
                 contactDialog.dismiss();
             } else {
                 Toast.makeText(mContext, "I dont have the permission", Toast.LENGTH_LONG).show();
-                PermissionUtils.askForPermission(getActivity(), WRITE_CALL_LOG);
+                PermissionUtils.askForPermissions(getActivity(), new String[]{WRITE_CALL_LOG});
                 contactDialog.dismiss();
             }
         });
