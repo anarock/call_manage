@@ -11,13 +11,6 @@
             android:key="@string/pref_app_theme_key"
             android:title="@string/pref_app_theme_title" />
 
-<!--        <ListPreference-->
-<!--            android:defaultValue="@string/pref_app_color_default_value"-->
-<!--            android:entries="@array/pref_app_color_entries"-->
-<!--            android:entryValues="@array/pref_app_color_entry_values"-->
-<!--            android:key="@string/pref_app_color_key"-->
-<!--            android:title="@string/pref_app_color_title" />-->
-
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_call">
@@ -55,32 +48,25 @@
             android:key="@string/pref_default_page_key"
             android:title="@string/pref_default_page_title" />
 
-<!--        <CheckBoxPreference-->
-<!--            android:defaultValue="@bool/pref_excel_enable_default_value"-->
-<!--            android:key="@string/pref_excel_enable_key"-->
-<!--            android:title="@string/pref_excel_enable_title"-->
-<!--            android:checked="true"-->
-<!--            app:defaultValue="@bool/pref_excel_enable_default_value" />-->
-
     </PreferenceCategory>
 
-<!--    <PreferenceCategory-->
-<!--        android:title="@string/pref_category_noise"-->
-<!--        app:iconSpaceReserved="false">-->
+    <!--    <PreferenceCategory-->
+    <!--        android:title="@string/pref_category_noise"-->
+    <!--        app:iconSpaceReserved="false">-->
 
-<!--        <SwitchPreference-->
-<!--            android:enabled="false"-->
-<!--            android:title="@string/pref_is_silent_title" />-->
-<!--            android:defaultValue="false"-->
-<!--            android:key="@string/pref_is_silent_key"-->
+    <!--        <SwitchPreference-->
+    <!--            android:enabled="false"-->
+    <!--            android:title="@string/pref_is_silent_title" />-->
+    <!--            android:defaultValue="false"-->
+    <!--            android:key="@string/pref_is_silent_key"-->
 
-<!--        <SwitchPreference-->
-<!--            android:enabled="false"-->
-<!--            android:title="@string/pref_is_no_vibrate_title" />-->
-<!--            android:defaultValue="false"-->
-<!--            android:key="@string/pref_is_no_vibrate_key"-->
+    <!--        <SwitchPreference-->
+    <!--            android:enabled="false"-->
+    <!--            android:title="@string/pref_is_no_vibrate_title" />-->
+    <!--            android:defaultValue="false"-->
+    <!--            android:key="@string/pref_is_no_vibrate_key"-->
 
-<!--    </PreferenceCategory>-->
+    <!--    </PreferenceCategory>-->
 
     <PreferenceCategory
         android:title="@string/pref_category_scurity"
