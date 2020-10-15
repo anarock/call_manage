@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.util.ArraySet;
+import androidx.annotation.RequiresApi;
+import androidx.collection.ArraySet;
 import android.util.Log;
 
 import java.util.Collections;

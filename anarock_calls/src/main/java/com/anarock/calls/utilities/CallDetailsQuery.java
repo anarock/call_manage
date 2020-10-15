@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.CallLog.Calls;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.telecom.TelecomManager;
 
 import java.util.ArrayList;
