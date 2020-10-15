@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>connect_app</key>
+        <value>
+            {"latest_app_url": "https://registration.anarock.com/anarock-connect?du=https://ea-assests.anarock.com/sales-connect-v0.3.0.apk", "latest_app_version_code": 3}
+        </value>
+    </entry>
+</defaultsMap>

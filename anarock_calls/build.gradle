@@ -1,0 +1,108 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+apply plugin: 'io.fabric'
+apply plugin: 'com.bugsnag.android.gradle'
+
+def releaseKeystorePropertiesFile = rootProject.file("keystore.properties")
+def releaseKeystoreProperties = new Properties();
+if (releaseKeystorePropertiesFile.exists()) {
+    releaseKeystoreProperties.load(new FileInputStream(releaseKeystorePropertiesFile))
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.anarock.calls"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 10
+        versionName "0.5.5"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "AGENTS_APP_ID", '"com.anarock.agentsapp"'
+        buildConfigField "String", "REMOTE_CONFIG_KEY", '"connect_app"'
+    }
+    signingConfigs {
+        debug {
+            storeFile rootProject.file("anarock-debug.keystore")
+            keyAlias "anarock"
+            keyPassword "prodeve#321"
+            storePassword "prodeve#321"
+        }
+        release {
+            storeFile rootProject.file(releaseKeystoreProperties['storeFile'])
+            storePassword releaseKeystoreProperties['storePassword']
+            keyAlias releaseKeystoreProperties['keyAlias']
+            keyPassword releaseKeystoreProperties['keyPassword']
+        }
+    }
+    buildTypes {
+        release {
+            manifestPlaceholders = [crashlyticsEnabled: true]
+            minifyEnabled false
+            debuggable false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '""'
+            buildConfigField "Integer", "CALLS_PAGE_SIZE", "100"
+        }
+        staging {
+            manifestPlaceholders = [crashlyticsEnabled: true]
+            initWith release
+            signingConfig signingConfigs.debug
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-staging"
+            buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".staging"'
+            buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
+        }
+        debug {
+            initWith release
+            debuggable true
+            ext.enableCrashlytics = false
+            manifestPlaceholders = [crashlyticsEnabled: false]
+            signingConfig signingConfigs.debug
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".debug"'
+            buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+
+    // Firebase core
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+
+    // Firebase Remote Config
+    implementation 'com.google.firebase:firebase-config:16.4.1'
+    implementation "com.google.firebase:firebase-crash:16.2.1"
+
+    // Crashlytics
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9') {
+        transitive = true
+    }
+
+    // Bugsnag
+    implementation 'com.bugsnag:bugsnag-android:4.+'
+
+    // Android port of google libphonenumber
+    implementation 'io.michaelrocks:libphonenumber-android:8.12.1'
+}
+
+apply plugin: 'com.google.gms.google-services'

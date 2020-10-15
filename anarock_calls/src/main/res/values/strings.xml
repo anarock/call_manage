@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Sales Connect</string>
+    <string name="agents_app_name">Sales</string>
+
+    <string name="permissions_title">Permissions Required</string>
+    <string name="permissions_description">%1$s requires permissions of call logs to enable full functionality of %2$s</string>
+    <string name="permissions_btn_text">Grant permissions</string>
+
+    <string name="auto_start_description">Enabling auto start will allow %1$s to log calls even when app is closed.</string>
+    <string name="auto_start_title">Enable auto start</string>
+    <string name="auto_start_btn_text">Enable now</string>
+    <string name="already_enabled">Already enabled</string>
+
+    <string name="auto_start_test_title">Test Auto Start</string>
+    <string name="auto_start_test_description">We will place a dummy call to ensure that everything is working as intended. Do not perform any actions until the test is complete.</string>
+    <string name="auto_start_test_btn_text">Begin Test</string>
+    <string name="auto_start_test_skip">Skip test</string>
+
+    <string name="update_title">App Update Available</string>
+    <string name="update_description">A new version of this app is available.</string>
+    <string name="update_btn_txt">Install Now</string>
+
+    <string name="success_title">Great!</string>
+    <string name="success_description">You are all set to use %1$s.</string>
+    <string name="success_btn_text">Open %1$s</string>
+
+    <string name="failure_title">Test failed!</string>
+    <string name="failure_description">Our team has been reported about this. You need to keep this app open in background to let it log your lead calls as expected. Do not kill this app! Contact support team in case of any issues.</string>
+</resources>

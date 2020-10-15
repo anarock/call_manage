@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/illustration"
+        android:layout_width="172dp"
+        android:layout_height="172dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="54dp"
+        android:src="@mipmap/success" />
+
+    <com.anarock.calls.views.AnarockMediumTextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="19dp"
+        android:text="@string/permissions_title"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <com.anarock.calls.views.AnarockMediumTextView
+        android:id="@+id/description"
+        android:layout_width="292dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="49dp"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/permissions_description"
+        android:textColor="@color/gray"
+        android:textSize="14sp" />
+
+    <com.anarock.calls.views.AnarockMediumButton
+        android:id="@+id/action_btn"
+        android:layout_width="190dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/solid_button_background"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/success_btn_text"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <com.anarock.calls.views.AnarockMediumButton
+        android:id="@+id/skip_btn"
+        android:visibility="gone"
+        android:layout_width="190dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bordered_button_background"
+        android:gravity="center"
+        android:text="@string/already_enabled"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="14sp" />
+
+</LinearLayout>

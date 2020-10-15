@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "551236596104",
+    "firebase_url": "https://staging-project-c8bbe.firebaseio.com",
+    "project_id": "staging-project-c8bbe",
+    "storage_bucket": "staging-project-c8bbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551236596104:android:99abb75ee21bf20a",
+        "android_client_info": {
+          "package_name": "com.anarock.agentsapp.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzhALKLS2o6npg3E_V7FgFkZrE_YJSNnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551236596104:android:d850d464776267b4",
+        "android_client_info": {
+          "package_name": "com.anarock.calls.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzhALKLS2o6npg3E_V7FgFkZrE_YJSNnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551236596104:android:236a0ae5f1ee003d",
+        "android_client_info": {
+          "package_name": "com.anarock.sales_connect.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzhALKLS2o6npg3E_V7FgFkZrE_YJSNnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551236596104:android:352e2d60000e0d69",
+        "android_client_info": {
+          "package_name": "com.anarock.salesapp.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzhALKLS2o6npg3E_V7FgFkZrE_YJSNnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551236596104-u9r0m1pehsadatntcvb7gvmalgvpiu31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
