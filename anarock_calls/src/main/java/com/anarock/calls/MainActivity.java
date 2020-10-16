@@ -275,46 +275,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleAction() {
         int actionTag = (int) actionButton.getTag();
-        switch (actionTag) {
-            case R.string.permissions_btn_text:
-                if (pendingPermissions.size() > 0) {
-                    requestPermissions();
-                } else {
-                    requestIgnoreBatteryOptimization();
-                }
-                break;
-            case R.string.update_btn_txt:
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                try {
-                    i.setData(Uri.parse(getRemoteConfig().getString("latest_app_url")));
-                    startActivity(i);
-                } catch (JSONException e) {
-                    Bugsnag.notify(e);
-                }
-                break;
-            case R.string.auto_start_btn_text:
-                startPowerSaverIntent();
-                break;
-            case R.string.auto_start_test_btn_text:
-                AutostartDetector.testAutoStart(this);
-                break;
-            case R.string.success_btn_text:
-                Intent intent = getPackageManager().getLaunchIntentForPackage(BuildConfig.AGENTS_APP_ID + BuildConfig.AGENTS_APP_ID_SUFFIX);
-                if (intent == null) {
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.AGENTS_APP_ID));
-                }
-                startActivity(intent);
-                break;
+        if (actionTag == R.string.permissions_btn_text) {
+            if (pendingPermissions.size() > 0) {
+                requestPermissions();
+            } else {
+                requestIgnoreBatteryOptimization();
+            }
+        } else if (actionTag == R.string.update_btn_txt) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            try {
+                i.setData(Uri.parse(getRemoteConfig().getString("latest_app_url")));
+                startActivity(i);
+            } catch (JSONException e) {
+                Bugsnag.notify(e);
+            }
+        } else if (actionTag == R.string.auto_start_btn_text) {
+            startPowerSaverIntent();
+        } else if (actionTag == R.string.auto_start_test_btn_text) {
+            AutostartDetector.testAutoStart(this);
+        } else if (actionTag == R.string.success_btn_text) {
+            Intent intent = getPackageManager().getLaunchIntentForPackage(BuildConfig.AGENTS_APP_ID + BuildConfig.AGENTS_APP_ID_SUFFIX);
+            if (intent == null) {
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.AGENTS_APP_ID));
+            }
+            startActivity(intent);
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.action_btn:
-                this.handleAction();
-                break;
+        if (v.getId() == R.id.action_btn) {
+            this.handleAction();
         }
     }
 

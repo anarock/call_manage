@@ -8,26 +8,23 @@ import com.crashlytics.android.core.CrashlyticsCore;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainApplication extends Application {
+public class AnarockCalls {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        initCrashlytics();
-        Bugsnag.init(this);
-        ResurrectionService.start(this);
-        ActivityTracker.init(this);
+    static public void onCreate(Application app) {
+        initCrashlytics(app);
+        Bugsnag.init(app);
+        ResurrectionService.start(app);
+        ActivityTracker.init(app);
     }
 
-    public void onTerminate() {
-        super.onTerminate();
-        ActivityTracker.release(this);
+    static public void onTerminate(Application app) {
+        ActivityTracker.release(app);
     }
 
-    private void initCrashlytics() {
+    static private void initCrashlytics(Application app) {
         Crashlytics crashlyticsKit = new Crashlytics.Builder()
                 .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
                 .build();
-        Fabric.with(this, crashlyticsKit);
+        Fabric.with(app, crashlyticsKit);
     }
 }

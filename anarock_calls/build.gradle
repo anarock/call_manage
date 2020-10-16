@@ -7,7 +7,7 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -25,7 +25,6 @@ if (releaseKeystorePropertiesFile.exists()) {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.anarock.calls"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 10
@@ -62,7 +61,6 @@ android {
             manifestPlaceholders = [crashlyticsEnabled: true]
             initWith release
             signingConfig signingConfigs.debug
-            applicationIdSuffix ".staging"
             versionNameSuffix "-staging"
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".staging"'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
@@ -73,7 +71,6 @@ android {
             ext.enableCrashlytics = false
             manifestPlaceholders = [crashlyticsEnabled: false]
             signingConfig signingConfigs.debug
-            applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".debug"'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
@@ -104,5 +101,3 @@ dependencies {
     // Android port of google libphonenumber
     implementation 'io.michaelrocks:libphonenumber-android:8.12.1'
 }
-
-apply plugin: 'com.google.gms.google-services'

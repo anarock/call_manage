@@ -98,6 +98,8 @@ dependencies {
     // Fingerprint
     implementation 'me.aflak.libraries:fingerprint:2.5.3'
 
+    implementation project(path: ':anarock_calls')
+
     //Test
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

@@ -2,6 +2,8 @@ package com.chooloo.www.callmanager;
 
 import android.app.Application;
 
+import com.anarock.calls.AnarockCalls;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,5 +23,13 @@ public class App extends Application {
                 }
             });
         }
+
+        AnarockCalls.onCreate(this);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        AnarockCalls.onTerminate(this);
     }
 }
