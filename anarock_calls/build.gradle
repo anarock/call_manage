@@ -13,15 +13,6 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-apply plugin: 'io.fabric'
-apply plugin: 'com.bugsnag.android.gradle'
-
-def releaseKeystorePropertiesFile = rootProject.file("keystore.properties")
-def releaseKeystoreProperties = new Properties();
-if (releaseKeystorePropertiesFile.exists()) {
-    releaseKeystoreProperties.load(new FileInputStream(releaseKeystorePropertiesFile))
-}
-
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -33,45 +24,20 @@ android {
         buildConfigField "String", "AGENTS_APP_ID", '"com.anarock.agentsapp"'
         buildConfigField "String", "REMOTE_CONFIG_KEY", '"connect_app"'
     }
-    signingConfigs {
-        debug {
-            storeFile rootProject.file("anarock-debug.keystore")
-            keyAlias "anarock"
-            keyPassword "prodeve#321"
-            storePassword "prodeve#321"
-        }
-        release {
-            storeFile rootProject.file(releaseKeystoreProperties['storeFile'])
-            storePassword releaseKeystoreProperties['storePassword']
-            keyAlias releaseKeystoreProperties['keyAlias']
-            keyPassword releaseKeystoreProperties['keyPassword']
-        }
-    }
     buildTypes {
         release {
             manifestPlaceholders = [crashlyticsEnabled: true]
-            minifyEnabled false
-            debuggable false
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '""'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "100"
         }
         staging {
             manifestPlaceholders = [crashlyticsEnabled: true]
-            initWith release
-            signingConfig signingConfigs.debug
-            versionNameSuffix "-staging"
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".staging"'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
         }
         debug {
-            initWith release
-            debuggable true
             ext.enableCrashlytics = false
             manifestPlaceholders = [crashlyticsEnabled: false]
-            signingConfig signingConfigs.debug
-            versionNameSuffix "-debug"
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".debug"'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
         }
