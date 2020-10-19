@@ -31,7 +31,7 @@ import java.util.List;
 
 public class PermissionsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final List<String> permissions = new ArrayList<String>() {{
+    private static final List<String> permissions = new ArrayList<String>() {{
         add(Manifest.permission.READ_CALL_LOG);
         add(Manifest.permission.READ_PHONE_STATE);
         add(Manifest.permission.PROCESS_OUTGOING_CALLS);
@@ -75,6 +75,16 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
     private String latestAppUrl;
 
     private Resources res;
+
+    public static void init(Context context) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(context, PermissionsActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

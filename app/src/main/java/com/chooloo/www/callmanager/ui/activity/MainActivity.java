@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.anarock.calls.FirebaseHelper;
+import com.anarock.calls.PermissionsActivity;
 import com.chooloo.www.callmanager.BuildConfig;
 import com.chooloo.www.callmanager.R;
 import com.chooloo.www.callmanager.adapter.CustomPagerAdapter;
@@ -31,7 +32,6 @@ import com.chooloo.www.callmanager.ui.dialog.ChangelogDialog;
 import com.chooloo.www.callmanager.ui.fragment.DialpadFragment;
 import com.chooloo.www.callmanager.ui.fragment.SearchBarFragment;
 import com.chooloo.www.callmanager.util.ContactUtils;
-import com.chooloo.www.callmanager.util.PermissionUtils;
 import com.chooloo.www.callmanager.util.PreferenceUtils;
 import com.chooloo.www.callmanager.util.ThemeUtils;
 import com.chooloo.www.callmanager.util.Utilities;
@@ -115,7 +115,7 @@ public class MainActivity extends AbsSearchBarActivity {
         ButterKnife.bind(this);
 
         // checks
-        PermissionUtils.checkDefaultDialer(this);
+        PermissionsActivity.init(this);
 
         // View Pager
         mAdapterViewPager = new CustomPagerAdapter(this, getSupportFragmentManager());
