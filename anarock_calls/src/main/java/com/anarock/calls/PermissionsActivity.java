@@ -24,19 +24,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bugsnag.android.Bugsnag;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class PermissionsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final List<String> permissions = new ArrayList<String>() {{
         add(Manifest.permission.READ_CALL_LOG);
@@ -72,14 +65,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button actionButton;
     Button skipButton;
 
-    private FirebaseRemoteConfig mFirebaseRemoteConfig;
-
     private final int PERMISSION_REQUEST_CODE = 200;
 
     private boolean hasAutoStartTestFailed;
 
     private boolean alreadyEnabled;
     private boolean skipTest;
+    private boolean updateRequired;
+    private String latestAppUrl;
 
     private Resources res;
 
@@ -91,8 +84,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             skipTest = extras.containsKey(AutostartDetector.AUTO_START_FAILURE);
             alreadyEnabled = skipTest;
             hasAutoStartTestFailed = extras.getBoolean(AutostartDetector.AUTO_START_FAILURE);
+            updateRequired = extras.containsKey(FirebaseHelper.FLAG_UPDATE_REQUIRED);
+            latestAppUrl = updateRequired
+                    ? extras.getString(FirebaseHelper.DATA_LATEST_APP_URL, null)
+                    : null;
         }
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_permissions);
         illustration = findViewById(R.id.illustration);
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
@@ -100,25 +97,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         skipButton = findViewById(R.id.skip_btn);
         actionButton.setOnClickListener(this);
         res = getResources();
-        initRemoteConfig();
-        fetchRemoteConfig();
         handleView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.fetchRemoteConfig();
         this.handleView();
-    }
-
-    private void initRemoteConfig() {
-        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettings(configSettings);
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
     }
 
     private boolean isIgnoringBatteryOptimizations() {
@@ -127,51 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return pm.isIgnoringBatteryOptimizations(getPackageName());
         }
         return true;
-    }
-
-    private JSONObject getRemoteConfig() {
-        JSONObject remoteConfig = new JSONObject();
-        try {
-            remoteConfig = new JSONObject(mFirebaseRemoteConfig.getValue(BuildConfig.REMOTE_CONFIG_KEY).asString());
-        } catch (JSONException e) {
-            Bugsnag.notify(e);
-        }
-        return remoteConfig;
-    }
-
-    private void fetchRemoteConfig() {
-        long cacheExpiration = 900L; // 15 mins in seconds.
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
-            cacheExpiration = 0;
-        }
-        mFirebaseRemoteConfig.fetch(cacheExpiration)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            mFirebaseRemoteConfig.activateFetched();
-                            if (isUpdateRequired()) handleView();
-                        }
-                    }
-                });
-    }
-
-    private long getAppVersionCode() {
-        try {
-            return getPackageManager().getPackageInfo(getPackageName(), PackageManager.COMPONENT_ENABLED_STATE_DEFAULT).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return 0L;
-    }
-
-    private boolean isUpdateRequired() {
-        try {
-            return getRemoteConfig().getLong("latest_app_version_code") > getAppVersionCode();
-        } catch (JSONException e) {
-            Bugsnag.notify(e);
-        }
-        return false;
     }
 
     private void startPowerSaverIntent() {
@@ -213,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setPendingPermissions();
         String appName = res.getString(R.string.app_name);
         String agentsAppName = res.getString(R.string.agents_app_name);
-        if(isUpdateRequired()) {
+        if(updateRequired) {
             illustration.setImageResource(R.mipmap.settings);
             title.setText(R.string.update_title);
             description.setText(R.string.update_description);
@@ -283,12 +223,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else if (actionTag == R.string.update_btn_txt) {
             Intent i = new Intent(Intent.ACTION_VIEW);
-            try {
-                i.setData(Uri.parse(getRemoteConfig().getString("latest_app_url")));
-                startActivity(i);
-            } catch (JSONException e) {
-                Bugsnag.notify(e);
-            }
+            i.setData(Uri.parse(latestAppUrl));
+            startActivity(i);
         } else if (actionTag == R.string.auto_start_btn_text) {
             startPowerSaverIntent();
         } else if (actionTag == R.string.auto_start_test_btn_text) {
@@ -330,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Bugsnag.notify(e1);
                 try {
                     startActivity(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    
+
                 } catch (Exception e2) {
                     Bugsnag.notify(e2);
                     startActivity(new Intent(Settings.ACTION_SETTINGS));

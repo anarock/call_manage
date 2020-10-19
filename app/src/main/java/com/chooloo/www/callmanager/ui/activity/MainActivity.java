@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.anarock.calls.FirebaseHelper;
 import com.chooloo.www.callmanager.BuildConfig;
 import com.chooloo.www.callmanager.R;
 import com.chooloo.www.callmanager.adapter.CustomPagerAdapter;
@@ -43,7 +44,6 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,6 +96,8 @@ public class MainActivity extends AbsSearchBarActivity {
     // Other
     @BindView(R.id.view_pager) ViewPager mViewPager;
     @BindView(R.id.view_pager_tab) SmartTabLayout mSmartTabLayout;
+
+    final FirebaseHelper firebaseHelper = new FirebaseHelper(this);
 
     // -- Overrides -- //
 
@@ -193,6 +195,14 @@ public class MainActivity extends AbsSearchBarActivity {
         checkIncomingIntent();
 
         showBiometricPrompt(this);
+
+        firebaseHelper.initRemoteConfig();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        firebaseHelper.fetchRemoteConfig();
     }
 
     @Override

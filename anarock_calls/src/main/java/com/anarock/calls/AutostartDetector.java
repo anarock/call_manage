@@ -84,7 +84,7 @@ public class AutostartDetector extends BroadcastReceiver {
     }
 
     static void openApp(Context context, boolean autoStartFailure) {
-        Intent openIntent = new Intent(context, MainActivity.class);
+        Intent openIntent = new Intent(context, PermissionsActivity.class);
         openIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Bundle extras = new Bundle();
         extras.putBoolean(AUTO_START_FAILURE, autoStartFailure);

@@ -15,10 +15,11 @@
     <application>
         <activity
             android:excludeFromRecents="true"
-            android:name=".MainActivity"
+            android:name=".PermissionsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
