@@ -71,7 +71,7 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
 
     private boolean alreadyEnabled;
     private boolean skipTest;
-    private boolean updateRequired;
+    private boolean isUpdateRequired;
     private String latestAppUrl;
 
     private Resources res;
@@ -94,8 +94,8 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
             skipTest = extras.containsKey(AutostartDetector.AUTO_START_FAILURE);
             alreadyEnabled = skipTest;
             hasAutoStartTestFailed = extras.getBoolean(AutostartDetector.AUTO_START_FAILURE);
-            updateRequired = extras.containsKey(FirebaseHelper.FLAG_UPDATE_REQUIRED);
-            latestAppUrl = updateRequired
+            isUpdateRequired = extras.containsKey(FirebaseHelper.FLAG_UPDATE_REQUIRED);
+            latestAppUrl = isUpdateRequired
                     ? extras.getString(FirebaseHelper.DATA_LATEST_APP_URL, null)
                     : null;
         }
@@ -163,7 +163,7 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
         setPendingPermissions();
         String appName = res.getString(R.string.app_name);
         String agentsAppName = res.getString(R.string.agents_app_name);
-        if(updateRequired) {
+        if(isUpdateRequired) {
             illustration.setImageResource(R.mipmap.settings);
             title.setText(R.string.update_title);
             description.setText(R.string.update_description);

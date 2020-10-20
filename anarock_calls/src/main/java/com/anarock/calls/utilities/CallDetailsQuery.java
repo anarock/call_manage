@@ -4,16 +4,15 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.CallLog.Calls;
 import androidx.core.content.ContextCompat;
-import android.telecom.TelecomManager;
+import android.telephony.PhoneNumberUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CallDetailsQuery {
     private static List<Integer> FAILED_CALL_TYPES = new ArrayList<Integer>() {{
@@ -70,12 +69,18 @@ public class CallDetailsQuery {
             int id = cursor.getInt(cursor.getColumnIndex(Calls._ID));
 
             String phone = cursor.getString(cursor.getColumnIndex(Calls.NUMBER));
-            String postDialDigits = cursor.getString(cursor.getColumnIndex(Calls.POST_DIAL_DIGITS));
+            if (phone == null) continue;
 
-            String[] numberParts = splitNumberAndPostDialDigits(phone);
-            if (numberParts != null) {
-                phone = numberParts[0];
-                postDialDigits = numberParts[1];
+            String postDialDigits = "";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                postDialDigits = cursor.getString(cursor.getColumnIndex(Calls.POST_DIAL_DIGITS));
+            }
+
+            // some devices inclclude post-dial digits in NUMBER column instead of  POST_DIAL_DIGITS column
+            String numberPostDialDigits = PhoneNumberUtils.extractPostDialPortion(phone);
+            if (numberPostDialDigits.length() > 0) {
+                postDialDigits = numberPostDialDigits;
+                phone = phone.substring(0, phone.indexOf(numberPostDialDigits));
             }
 
             String formattedPhone = PhoneNumberFormatter.getE164PhoneNumber(context, phone);
@@ -106,20 +111,5 @@ public class CallDetailsQuery {
         cursor.close();
 
         return callsDetails;
-    }
-
-    private static String[] splitNumberAndPostDialDigits(String phone) {
-        // splits on first wait/pause character: "111,222;333,444" -> ["111", ",222;333,444"]
-        Pattern p = Pattern.compile(String.format("^(.+?)([%s%s].+)$", TelecomManager.DTMF_CHARACTER_PAUSE, TelecomManager.DTMF_CHARACTER_WAIT));
-        Matcher m = p.matcher(phone);
-
-        if (!m.matches()) {
-            return null;
-        }
-
-        phone = m.group(1);
-        String postDialDigits = m.group(2);
-
-        return new String[]{phone, postDialDigits};
     }
 }
