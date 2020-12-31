@@ -18,27 +18,34 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10
-        versionName "0.5.5"
+        versionCode 14
+        versionName "0.6.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         buildConfigField "String", "AGENTS_APP_ID", '"com.anarock.agentsapp"'
+        buildConfigField "String", "CP_APP_ID", '"com.anarock.cpsourcing"'
         buildConfigField "String", "REMOTE_CONFIG_KEY", '"connect_app"'
     }
     buildTypes {
         release {
             manifestPlaceholders = [crashlyticsEnabled: true]
+            buildConfigField "String", "SOURCE_ID_SUFFIX", '""'
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '""'
+            buildConfigField "String", "CP_APP_ID_SUFFIX", '""'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "100"
         }
         staging {
             manifestPlaceholders = [crashlyticsEnabled: true]
+            buildConfigField "String", "SOURCE_ID_SUFFIX", '".staging"'
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".staging"'
+            buildConfigField "String", "CP_APP_ID_SUFFIX", '".staging"'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
         }
         debug {
             ext.enableCrashlytics = false
             manifestPlaceholders = [crashlyticsEnabled: false]
+            buildConfigField "String", "SOURCE_ID_SUFFIX", '".debug"'
             buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".debug"'
+            buildConfigField "String", "CP_APP_ID_SUFFIX", '".debug"'
             buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
         }
     }

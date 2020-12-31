@@ -63,6 +63,7 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
     TextView title;
     TextView description;
     Button actionButton;
+    Button actionButton2;
     Button skipButton;
 
     private final int PERMISSION_REQUEST_CODE = 200;
@@ -106,6 +107,8 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
         actionButton = findViewById(R.id.action_btn);
         skipButton = findViewById(R.id.skip_btn);
         actionButton.setOnClickListener(this);
+        actionButton2 = findViewById(R.id.action_btn2);
+        actionButton2.setOnClickListener(this);
         res = getResources();
         handleView();
     }
@@ -163,6 +166,7 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
         setPendingPermissions();
         String appName = res.getString(R.string.app_name);
         String agentsAppName = res.getString(R.string.agents_app_name);
+        actionButton2.setVisibility(View.GONE);
         if(isUpdateRequired) {
             illustration.setImageResource(R.mipmap.settings);
             title.setText(R.string.update_title);
@@ -220,6 +224,12 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
             skipButton.setVisibility(View.GONE);
             actionButton.setText(successButtonText);
             actionButton.setTag(R.string.success_btn_text);
+//            TODO: uncomment when CP app live on prod
+//            actionButton2.setVisibility(View.VISIBLE);
+            actionButton2.setText(
+                res.getString(R.string.success_btn_text, res.getString(R.string.cp_app_name))
+            );
+            actionButton2.setTag(R.id.action_btn2);
         }
     }
 
@@ -251,8 +261,16 @@ public class PermissionsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.action_btn) {
+        int id = v.getId();
+        if (id == R.id.action_btn) {
             this.handleAction();
+        } else if (id == R.id.action_btn2) {
+            Intent intent = getPackageManager().getLaunchIntentForPackage(BuildConfig.CP_APP_ID + BuildConfig.CP_APP_ID_SUFFIX);
+            if (intent == null) {
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.CP_APP_ID));
+            }
+            startActivity(intent);
         }
     }
 

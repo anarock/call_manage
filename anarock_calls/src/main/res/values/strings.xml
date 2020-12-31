@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Sales Connect</string>
     <string name="agents_app_name">Sales</string>
+    <string name="cp_app_name">CP</string>
 
     <string name="permissions_title">Permissions Required</string>
     <string name="permissions_description">%1$s requires permissions of call logs to enable full functionality of %2$s</string>

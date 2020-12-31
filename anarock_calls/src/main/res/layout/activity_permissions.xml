@@ -52,6 +52,19 @@
         android:textSize="14sp" />
 
     <com.anarock.calls.views.AnarockMediumButton
+        android:id="@+id/action_btn2"
+        android:layout_width="190dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/solid_button_background"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/success_btn_text"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <com.anarock.calls.views.AnarockMediumButton
         android:id="@+id/skip_btn"
         android:visibility="gone"
         android:layout_width="190dp"

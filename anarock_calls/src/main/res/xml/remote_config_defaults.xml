@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <defaultsMap>
     <entry>
-        <key>connect_app</key>
+        <key>connect_app_latest_version_code</key>
+        <value>9</value>
+    </entry>
+    <entry>
+        <key>connect_app_latest_url</key>
         <value>
-            {"latest_app_url": "https://registration.anarock.com/anarock-connect?du=https://ea-assests.anarock.com/sales-connect-v0.3.0.apk", "latest_app_version_code": 3}
+            https://real-estate-saas-connect.netlify.app/?du=https://appcdn.anarock.com/sales-connect-v0.6.1.apk
         </value>
     </entry>
 </defaultsMap>

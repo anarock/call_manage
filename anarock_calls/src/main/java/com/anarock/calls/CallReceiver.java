@@ -97,7 +97,12 @@ public class CallReceiver extends BroadcastReceiver {
 
     private void sendEvent(String eventType, Map<String, Object> payload) {
         Intent intent = getCallEventIntent(eventType, payload);
-        context.sendBroadcast(intent);
+        for(String basePackageName : CallsDetailsReceiver.WHITELISTED_PACKAGES) {
+            String packageName = String.format("%s%s", basePackageName, BuildConfig.SOURCE_ID_SUFFIX);
+            Intent mIntent = new Intent(intent);
+            mIntent.setPackage(packageName);
+            context.sendBroadcast(mIntent);
+        }
     }
 
     private String getPhoneNumber(String eventType, Intent intent) {

@@ -15,9 +15,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class FirebaseHelper {
     static public String FLAG_UPDATE_REQUIRED = "FIREBASE_UPDATE_REQUIRED";
     static public String DATA_LATEST_APP_URL = "FIREBASE_LATEST_APP_URL";
@@ -83,31 +80,27 @@ public class FirebaseHelper {
         return 0L;
     }
 
-    private JSONObject getRemoteConfig() {
-        try {
-            return new JSONObject(firebaseRemoteConfig.getValue(BuildConfig.REMOTE_CONFIG_KEY).asString());
-        } catch (JSONException e) {
-            Bugsnag.notify(e);
-        }
-        return new JSONObject();
-    }
-
     @Nullable
     private String getLatestAppUrl() {
-        try {
-            return getRemoteConfig().getString("latest_app_url");
-        } catch (JSONException e) {
-            Bugsnag.notify(e);
-        }
-        return null;
+        return firebaseRemoteConfig.getString("connect_app_latest_url");
     }
 
     private boolean isUpdateRequired() {
-        try {
-            return getRemoteConfig().getLong("latest_app_version_code") > getAppVersionCode();
-        } catch (JSONException e) {
-            Bugsnag.notify(e);
-        }
-        return false;
+        return firebaseRemoteConfig.getLong("connect_app_latest_version_code") > getAppVersionCode();
     }
 }
+
+/*
+class FirebaseRemoteConfig {
+    // connect app
+    int connect_app_min_version_code;
+    int connect_app_latest_version_code;
+    String connect_app_latest_url;
+
+    // sales app
+    int sales_app_min_version_code;
+    int sales_app_latest_version_code;
+    String support_email;
+    Boolean hide_call_recordings;
+};
+*/
