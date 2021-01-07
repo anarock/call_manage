@@ -78,18 +78,6 @@
         app:layout_constraintTop_toBottomOf="@id/contact_popup_name"
         tools:text="+972 999 888 7777" />
 
-    <TextView
-        android:id="@+id/contact_popup_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contact_popup_number"
-        tools:text="+972 999 888 7777" />
-
     <!-- call, edit, delete, info, add -->
     <LinearLayout
         android:layout_width="0dp"
@@ -100,7 +88,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contact_popup_date">
+        app:layout_constraintTop_toBottomOf="@id/contact_popup_number">
 
         <!-- Call Button -->
         <ImageButton
