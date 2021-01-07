@@ -13,30 +13,6 @@
         android:id="@+id/ongoing_call_layout"
         layout="@layout/on_going_call" />
 
-    <!-- Reject Options -->
-    <include
-        android:id="@+id/overlay_reject_call_options"
-        layout="@layout/overlay_reject_call_options"
-        tools:visibility="gone" />
-
-    <!-- Answer Options -->
-    <include
-        android:id="@+id/overlay_answer_call_options"
-        layout="@layout/overlay_answer_call_options"
-        tools:visibility="gone" />
-
-    <!-- Action Timer Overlay -->
-    <include
-        android:id="@+id/overlay_action_timer"
-        layout="@layout/overlay_action_timer"
-        tools:visibility="gone" />
-
-    <!-- Send SMS Overlay -->
-    <include
-        android:id="@+id/overlay_send_sms"
-        layout="@layout/overlay_send_sms"
-        tools:visibility="gone" />
-
     <!-- Dialer Fragment -->
     <FrameLayout
         android:id="@+id/dialer_fragment"
