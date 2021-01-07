@@ -26,7 +26,6 @@ public class RecentCall {
     private int callType;
     private String callDuration;
     private Date callDate;
-    private int count;
 
     // Call Types
     public static final int TYPE_OUTGOING = OUTGOING_TYPE;
@@ -62,7 +61,6 @@ public class RecentCall {
         this.callDuration = cursor.getString(cursor.getColumnIndex(COLUMN_DURATION));
         this.callDate = new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_DATE)));
         this.callType = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE));
-        this.count = checkNextMutliple(cursor);
         cursor.moveToPosition(cursor.getPosition());
     }
 
@@ -88,10 +86,6 @@ public class RecentCall {
 
     public Date getCallDate() {
         return this.callDate;
-    }
-
-    public int getCount() {
-        return this.count;
     }
 
     /**

@@ -71,9 +71,6 @@ public class RecentsAdapter extends AbsFastScrollerAdapter<ListItemHolder> {
         // hide header
         holder.header.setVisibility(View.GONE);
 
-        // append calls in a row count
-        if (recentCall.getCount() > 1) callerName += (" (" + recentCall.getCount() + ")");
-
         // set date
         holder.bigText.setText(callerName != null ? callerName : phoneNumber);
         holder.smallText.setText(RelativeTime.getTimeAgo(date.getTime()));
