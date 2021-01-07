@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "655715001174",
+    "firebase_url": "https://agent-app-prod.firebaseio.com",
+    "project_id": "agent-app-prod",
+    "storage_bucket": "agent-app-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655715001174:android:303617b78c8f139c",
+        "android_client_info": {
+          "package_name": "com.anarock.agentsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIPdE3o80BVqHk1jRPXVwpJGkbhSeI9GE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655715001174:android:9ea5a6e1a9e5748e",
+        "android_client_info": {
+          "package_name": "com.anarock.calls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIPdE3o80BVqHk1jRPXVwpJGkbhSeI9GE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655715001174:android:f178e1a7abb2fd40",
+        "android_client_info": {
+          "package_name": "com.anarock.sales_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIPdE3o80BVqHk1jRPXVwpJGkbhSeI9GE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655715001174:android:c33b5131801c6846",
+        "android_client_info": {
+          "package_name": "com.anarock.salesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIPdE3o80BVqHk1jRPXVwpJGkbhSeI9GE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655715001174-fiqvhhie8qpifeb93bbjfh13q9lm1bsk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

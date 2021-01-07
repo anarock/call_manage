@@ -1,0 +1,76 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.library'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 14
+        versionName "0.6.1"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField "String", "AGENTS_APP_ID", '"com.anarock.agentsapp"'
+        buildConfigField "String", "CP_APP_ID", '"com.anarock.cpsourcing"'
+        buildConfigField "String", "REMOTE_CONFIG_KEY", '"connect_app"'
+    }
+    buildTypes {
+        release {
+            manifestPlaceholders = [crashlyticsEnabled: true]
+            buildConfigField "String", "SOURCE_ID_SUFFIX", '""'
+            buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '""'
+            buildConfigField "String", "CP_APP_ID_SUFFIX", '""'
+            buildConfigField "Integer", "CALLS_PAGE_SIZE", "100"
+        }
+        staging {
+            manifestPlaceholders = [crashlyticsEnabled: true]
+            buildConfigField "String", "SOURCE_ID_SUFFIX", '".staging"'
+            buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".staging"'
+            buildConfigField "String", "CP_APP_ID_SUFFIX", '".staging"'
+            buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
+        }
+        debug {
+            ext.enableCrashlytics = false
+            manifestPlaceholders = [crashlyticsEnabled: false]
+            buildConfigField "String", "SOURCE_ID_SUFFIX", '".debug"'
+            buildConfigField "String", "AGENTS_APP_ID_SUFFIX", '".debug"'
+            buildConfigField "String", "CP_APP_ID_SUFFIX", '".debug"'
+            buildConfigField "Integer", "CALLS_PAGE_SIZE", "5"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    // Firebase core
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+
+    // Firebase Remote Config
+    implementation 'com.google.firebase:firebase-config:16.4.1'
+    implementation "com.google.firebase:firebase-crash:16.2.1"
+
+    // Crashlytics
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9') {
+        transitive = true
+    }
+
+    // Bugsnag
+    implementation 'com.bugsnag:bugsnag-android:4.+'
+
+    // Android port of google libphonenumber
+    implementation 'io.michaelrocks:libphonenumber-android:8.12.1'
+}
