@@ -182,18 +182,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/ongoing_call_more_actions_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hold_for_actions"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        android:textSize="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reject_btn"
-        app:layout_constraintVertical_bias="0.7" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

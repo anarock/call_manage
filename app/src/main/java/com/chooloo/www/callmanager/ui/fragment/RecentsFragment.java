@@ -107,7 +107,7 @@ public class RecentsFragment extends AbsCursorFragment implements
 
         Contact contact;
         if (recentCall.getCallerName() != null)
-            contact = ContactUtils.getContact(mContext, recentCall.getCallerNumber(), null);
+            contact = ContactUtils.lookupContact(mContext, recentCall.getCallerNumber());
         else contact = new Contact(recentCall.getCallerName(), recentCall.getCallerNumber(), null);
 
         // Initiate the dialog
@@ -116,7 +116,7 @@ public class RecentsFragment extends AbsCursorFragment implements
 
         // Views declarations
         ConstraintLayout popupLayout;
-        TextView contactName, contactNumber, contactDate;
+        TextView contactName, contactNumber;
         ImageView contactPhoto, contactPhotoPlaceholder;
         ImageButton callButton, editButton, deleteButton, infoButton, addButton, smsButton, favButton;
 
@@ -127,7 +127,6 @@ public class RecentsFragment extends AbsCursorFragment implements
 
         contactName = contactDialog.findViewById(R.id.contact_popup_name);
         contactNumber = contactDialog.findViewById(R.id.contact_popup_number);
-        contactDate = contactDialog.findViewById(R.id.contact_popup_date);
 
         callButton = contactDialog.findViewById(R.id.contact_popup_button_call);
         editButton = contactDialog.findViewById(R.id.contact_popup_button_edit);
@@ -161,9 +160,6 @@ public class RecentsFragment extends AbsCursorFragment implements
             contactPhoto.setVisibility(View.GONE);
             contactPhotoPlaceholder.setVisibility(View.VISIBLE);
         }
-
-        contactDate.setVisibility(View.VISIBLE);
-        contactDate.setText(recentCall.getCallDateString());
 
         // -- Click Listeners -- //
         if (contact.getName() != null) {
