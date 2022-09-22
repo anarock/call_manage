@@ -25,7 +25,7 @@ class MainActivity : BaseActivity<MainViewState>() {
     private val recentsViewState: RecentsViewState by viewModels()
     private val contactsViewState: ContactsViewState by viewModels()
     private val binding by lazy { MainBinding.inflate(layoutInflater) }
-    private val _fragments by lazy { listOf(_contactsFragment, _recentsFragment) }
+    private val _fragments by lazy { listOf(/*_contactsFragment,*/ _recentsFragment) }
     private val _recentsFragment by lazy { choolooFragmentFactory.getRecentsFragment() }
     private val _contactsFragment by lazy { choolooFragmentFactory.getContactsFragment() }
 
@@ -40,7 +40,7 @@ class MainActivity : BaseActivity<MainViewState>() {
 
         binding.apply {
             mainTabs.viewPager = mainViewPager
-            mainTabs.setHeadersResList(arrayOf(R.string.contacts, R.string.recents))
+            mainTabs.setHeadersResList(arrayOf(/*R.string.contacts,*/ R.string.recents))
 
             mainMenuButton.setOnClickListener {
                 viewState.onMenuClick()
