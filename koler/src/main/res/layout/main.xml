@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     app:layoutDescription="@xml/main_scene">
 
     <!-- menu button -->
-    <com.chooloo.www.chooloolib.ui.widgets.IconButton
+<!--    <com.chooloo.www.chooloolib.ui.widgets.IconButton
         android:id="@+id/main_menu_button"
+        style="@style/Chooloo.Button.Icon.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/content_description_menu_button"
+        android:minWidth="48dp"
+        android:visibility="gone"
         app:icon="@drawable/more_vert"
-        style="@style/Chooloo.Button.Icon.Small"
+        tools:ignore="RedundantDescriptionCheck"
         tools:layout_editor_absoluteX="346dp"
-        tools:layout_editor_absoluteY="18dp" />
+        tools:layout_editor_absoluteY="18dp" />-->
 
     <!-- tabs -->
     <com.chooloo.www.chooloolib.ui.widgets.Tabs

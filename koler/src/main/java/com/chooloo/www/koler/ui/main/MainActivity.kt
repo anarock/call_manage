@@ -42,9 +42,9 @@ class MainActivity : BaseActivity<MainViewState>() {
             mainTabs.viewPager = mainViewPager
             mainTabs.setHeadersResList(arrayOf(/*R.string.contacts,*/ R.string.recents))
 
-            mainMenuButton.setOnClickListener {
+           /* mainMenuButton.setOnClickListener {
                 viewState.onMenuClick()
-            }
+            }*/
 
             mainDialpadButton.setOnClickListener {
                 viewState.onDialpadFabClick()
