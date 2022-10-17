@@ -61,7 +61,11 @@ class DialerFragment @Inject constructor() : DialpadFragment() {
         viewState.apply {
             text.observe(this@DialerFragment) {
                 suggestionsViewState.onFilterChanged(it)
-                telecomInteractor.handleSpecialChars(it)
+                /**
+                 * TODO Commenting this for Crash : https://app.bugsnag.com/anarock-dot-com/anarock-connect/errors/61d01feb647b05000769d578?filters[event.since]=30d&filters[app.release_stage]=development
+                 * Not finding its usage for time being. Will check if any issue comes.
+                 */
+//                telecomInteractor.handleSpecialChars(it)
             }
 
             isSuggestionsVisible.observe(this@DialerFragment) {
