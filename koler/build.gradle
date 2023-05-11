@@ -93,7 +93,7 @@ dependencies {
     )
 
     implementation(
-            project(":chooloolib"),
+            project(":koler:chooloolib"),
             fileTree(include: ['*.jar'], dir: 'libs'),
             'androidx.wear:wear:1.1.0',
             'androidx.core:core-ktx:1.6.0',
