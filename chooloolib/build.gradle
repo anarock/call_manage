@@ -41,6 +41,12 @@ android {
     hilt { enableAggregatingTask true }
 }
 
+repositories {
+    flatDir {
+        dirs "${rootDir}/koler/libs"
+    }
+}
+
 dependencies {
     kapt(
             "androidx.hilt:hilt-compiler:1.0.0-alpha01",
@@ -58,6 +64,9 @@ dependencies {
             "androidx.compose.ui:ui-test-junit4:1.0.4",
             "androidx.test.espresso:espresso-core:3.4.0"
     )
+
+    implementation(name: 'colorsheet-1.0.1', ext: 'aar')
+
 
     implementation(
             // ktx

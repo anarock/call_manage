@@ -74,6 +74,11 @@ dependencies {
             "androidx.test.espresso:espresso-core:3.3.0"
     )
 
+    implementation(name: 'indicator-fast-scroll-1.4.0', ext: 'aar')
+
+    implementation(name: 'colorsheet-1.0.1', ext: 'aar')
+
+
     implementation(
             project(":chooloolib"),
             fileTree(include: ["*.jar"], dir: "libs"),
