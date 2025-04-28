@@ -78,7 +78,7 @@ dependencies {
     implementation(
             'com.squareup.picasso:picasso:2.5.2',
             'androidx.core:core-ktx:1.7.0',
-            'dev.sasikanth:colorsheet:1.0.1',
+            'com.github.msasikanth:colorsheet:1.0.1',
             'androidx.appcompat:appcompat:1.4.1',
             'io.reactivex.rxjava2:rxjava:2.1.16',
             'androidx.preference:preference:1.1.1',
