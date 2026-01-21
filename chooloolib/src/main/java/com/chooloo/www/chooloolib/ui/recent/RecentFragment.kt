@@ -2,8 +2,7 @@ package com.chooloo.www.chooloolib.ui.recent
 
 import android.os.Bundle
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.chooloo.www.chooloolib.R
 import com.chooloo.www.chooloolib.databinding.RecentBinding
 import com.chooloo.www.chooloolib.di.factory.fragment.FragmentFactory
@@ -20,10 +19,16 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RecentFragment @Inject constructor() : BaseFragment<RecentViewState>() {
     override val contentView by lazy { binding.root }
-    override val viewState: RecentViewState by viewModels()
+    override val viewState: RecentViewState by lazy {
+        ViewModelProvider(requireActivity())[RecentViewState::class.java]
+    }
 
-    private val historyViewState: RecentsViewState by viewModels()
-    private val menuViewState: RecentMenuViewState by activityViewModels()
+    private val historyViewState: RecentsViewState by lazy {
+        ViewModelProvider(requireActivity())[RecentsViewState::class.java]
+    }
+    private val menuViewState: RecentMenuViewState by lazy {
+        ViewModelProvider(requireActivity())[RecentMenuViewState::class.java]
+    }
     private val binding by lazy { RecentBinding.inflate(layoutInflater) }
 
     @Inject lateinit var prompts: PromptsInteractor

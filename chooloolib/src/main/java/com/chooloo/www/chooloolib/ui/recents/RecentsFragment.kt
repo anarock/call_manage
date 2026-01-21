@@ -1,7 +1,9 @@
 package com.chooloo.www.chooloolib.ui.recents
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.chooloo.www.chooloolib.adapter.RecentsAdapter
 import com.chooloo.www.chooloolib.di.factory.fragment.FragmentFactory
 import com.chooloo.www.chooloolib.interactor.preferences.PreferencesInteractor
@@ -15,12 +17,17 @@ import javax.inject.Inject
 @AndroidEntryPoint
 open class RecentsFragment @Inject constructor() : ListFragment<RecentAccount, RecentsViewState>() {
     @Inject override lateinit var adapter: RecentsAdapter
-    override val viewState: RecentsViewState by activityViewModels()
+    private val _viewState: RecentsViewState by lazy {
+        ViewModelProvider(requireActivity())[RecentsViewState::class.java]
+    }
+    override val viewState: RecentsViewState get() = _viewState
 
     @Inject lateinit var prompts: PromptsInteractor
     @Inject lateinit var fragmentFactory: FragmentFactory
     @Inject lateinit var preferences: PreferencesInteractor
-    private val recentsHistoryViewState: RecentsHistoryViewState by activityViewModels()
+    private val recentsHistoryViewState: RecentsHistoryViewState by lazy {
+        ViewModelProvider(requireActivity())[RecentsHistoryViewState::class.java]
+    }
 
 
     override fun onSetup() {

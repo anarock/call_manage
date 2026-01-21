@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.chooloo.www.chooloolib.di.factory.fragment.FragmentFactory
 import com.chooloo.www.chooloolib.interactor.telecom.TelecomInteractor
 import com.chooloo.www.chooloolib.ui.contacts.ContactsSuggestionsViewState
@@ -16,9 +15,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class DialerFragment @Inject constructor() : DialpadFragment() {
-    override val viewState: DialerViewState by viewModels()
+    override val viewState: DialerViewState by lazy {
+        ViewModelProvider(requireActivity())[DialerViewState::class.java]
+    }
 
-    private val suggestionsViewState: ContactsSuggestionsViewState by activityViewModels()
+    private val suggestionsViewState: ContactsSuggestionsViewState by lazy {
+        ViewModelProvider(requireActivity())[ContactsSuggestionsViewState::class.java]
+    }
     private val _suggestionsFragment by lazy { fragmentFactory.getContactsSuggestionsFragment() }
 
     @Inject lateinit var fragmentFactory: FragmentFactory

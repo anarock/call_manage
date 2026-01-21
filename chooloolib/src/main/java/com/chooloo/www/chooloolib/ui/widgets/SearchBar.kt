@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.chooloo.www.chooloolib.R
 import com.chooloo.www.chooloolib.util.getAttrColor
+import com.google.android.material.R as MaterialR
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -60,7 +61,7 @@ class SearchBar : TextInputLayout {
                 return@InputFilter null
             })
 
-            setTextAppearance(R.style.TextAppearance_Material3_TitleSmall)
+            setTextAppearance(MaterialR.style.TextAppearance_Material3_TitleSmall)
             setPadding(spacing, 0, spacingSmall, 0)
             setHintTextColor(ColorStateList.valueOf(colorForeground))
 

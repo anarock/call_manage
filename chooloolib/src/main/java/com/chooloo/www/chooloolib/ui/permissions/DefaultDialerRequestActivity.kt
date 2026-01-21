@@ -47,6 +47,19 @@ class DefaultDialerRequestActivity : BaseActivity<BaseViewState>() {
         if (permissions.isDefaultDialer) {
             permissions.entryDefaultDialerResult(true)
             finish()
+            return
+        }
+
+        // Check if default dialer prompt has already been shown (to prevent duplicate prompts)
+        // This is set by MainActivity before requesting permissions
+        val prefs = getSharedPreferences("anarock_calls_prefs", Context.MODE_PRIVATE)
+        val hasShownDefaultDialer = prefs.getBoolean("has_shown_default_dialer", false)
+        
+        if (hasShownDefaultDialer) {
+            // Default dialer prompt was already shown in MainActivity, just return false and finish
+            permissions.entryDefaultDialerResult(false)
+            finish()
+            return
         }
 
         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

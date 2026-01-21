@@ -1,11 +1,12 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
 
 android {
+    namespace "com.chooloo.www.koler"
     compileSdk 31
 
     defaultConfig {
@@ -41,12 +42,21 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = "17"
+    }
+    
+    kapt {
+        correctErrorTypes true
+        javacOptions {
+            option("-source", "17")
+            option("-target", "17")
+            option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+        }
     }
 
     buildFeatures {
@@ -56,19 +66,11 @@ android {
     lintOptions {
         checkReleaseBuilds false
     }
-
-    hilt {
-        enableAggregatingTask true
-    }
-
-    kapt {
-        correctErrorTypes true
-    }
 }
 
 dependencies {
     kapt(
-            'com.google.dagger:hilt-compiler:2.38.1',
+            'com.google.dagger:hilt-compiler:2.51.1',
             'androidx.hilt:hilt-compiler:1.0.0-alpha01'
     )
 
@@ -111,7 +113,7 @@ dependencies {
             'androidx.fragment:fragment-ktx:1.1.0',
             'com.github.skydoves:androidveil:1.1.1',
             'androidx.arch.core:core-runtime:2.1.0',
-            'com.google.dagger:hilt-android:2.38.1',
+            'com.google.dagger:hilt-android:2.51.1',
             'com.github.reddit:IndicatorFastScroll:1.4.0',
             'androidx.legacy:legacy-support-v4:1.0.0',
             'androidx.preference:preference-ktx:1.1.1',
@@ -125,7 +127,8 @@ dependencies {
             'com.daimajia.androidanimations:library:2.4@aar',
             'androidx.constraintlayout:constraintlayout:2.0.4',
             'com.pushtorefresh.storio3:content-resolver:3.0.0',
-            'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0',
+            'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2',
+            'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2',
             'androidx.navigation:navigation-fragment-ktx:2.3.3',
             'com.googlecode.libphonenumber:libphonenumber:8.12.18'
     )

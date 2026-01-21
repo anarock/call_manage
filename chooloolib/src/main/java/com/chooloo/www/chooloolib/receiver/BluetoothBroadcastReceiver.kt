@@ -7,15 +7,26 @@ import android.content.Intent
 import android.media.AudioManager
 import android.media.AudioManager.MODE_IN_CALL
 import android.media.AudioManager.MODE_NORMAL
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 
-@AndroidEntryPoint
 class BluetoothBroadcastReceiver : BroadcastReceiver() {
-    @Inject lateinit var audioManager: AudioManager
-
+    
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface ReceiverEntryPoint {
+        fun audioManager(): AudioManager
+    }
 
     override fun onReceive(context: Context, intent: Intent) {
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            ReceiverEntryPoint::class.java
+        )
+        val audioManager = entryPoint.audioManager()
+        
         when (intent.action) {
             ACTION_STATE_CHANGED -> {
                 when (intent.getIntExtra(EXTRA_STATE, ERROR)) {

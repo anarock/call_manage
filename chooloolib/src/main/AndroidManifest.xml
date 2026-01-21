@@ -15,9 +15,11 @@
             android:screenOrientation="unspecified" />
         <activity
             android:name=".ui.permissions.PermissionRequestActivity"
+            android:exported="false"
             android:screenOrientation="unspecified" />
         <activity
             android:name=".ui.permissions.DefaultDialerRequestActivity"
+            android:exported="false"
             android:screenOrientation="unspecified" />
 
         <meta-data
@@ -39,6 +41,11 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".receiver.CallBroadcastReceiver" />
+        <receiver 
+            android:name=".receiver.CallBroadcastReceiver"
+            android:exported="false" />
+        <receiver 
+            android:name=".receiver.BluetoothBroadcastReceiver"
+            android:exported="false" />
     </application>
 </manifest>

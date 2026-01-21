@@ -24,6 +24,11 @@ abstract class BaseFragment<out VM : BaseViewState> : Fragment(), BaseView<VM> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        baseActivity.onFragmentSetup(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         onSetup()
         viewState.apply {
             attach()
@@ -40,8 +45,6 @@ abstract class BaseFragment<out VM : BaseViewState> : Fragment(), BaseView<VM> {
                 it.ifNew?.let(this@BaseFragment::showMessage)
             }
         }
-
-        baseActivity.onFragmentSetup(this)
     }
 
     override fun showError(@StringRes stringResId: Int) {

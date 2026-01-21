@@ -1,7 +1,7 @@
 package com.chooloo.www.chooloolib.ui.recent.menu
 
 import android.view.MenuItem
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.chooloo.www.chooloolib.R
 import com.chooloo.www.chooloolib.di.factory.fragment.FragmentFactory
 import com.chooloo.www.chooloolib.interactor.dialog.DialogsInteractor
@@ -12,7 +12,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecentMenuFragment @Inject constructor() : BaseMenuFragment() {
-    override val viewState: RecentMenuViewState by activityViewModels()
+    override val viewState: RecentMenuViewState by lazy {
+        ViewModelProvider(requireActivity())[RecentMenuViewState::class.java]
+    }
 
     @Inject lateinit var prompts: PromptsInteractor
     @Inject lateinit var dialogs: DialogsInteractor

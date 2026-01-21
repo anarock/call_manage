@@ -12,6 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.setPadding
 import com.chooloo.www.chooloolib.R
 import com.chooloo.www.chooloolib.util.getSelectableItemBackgroundBorderlessDrawable
+import com.google.android.material.R as MaterialR
 import com.chooloo.www.chooloolib.util.getSizeInDp
 
 
@@ -34,7 +35,7 @@ class DialpadKey : LinearLayout {
         _digitTextView = TextView(context, attrs, defStyleRes).apply {
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 
-            setTextAppearance(R.style.TextAppearance_Material3_HeadlineMedium)
+            setTextAppearance(MaterialR.style.TextAppearance_Material3_HeadlineMedium)
             typeface = ResourcesCompat.getFont(context, R.font.google_sans_bold)
         }.also {
             addView(it)
@@ -43,7 +44,7 @@ class DialpadKey : LinearLayout {
         _lettersTextView = TextView(context, attrs, defStyleRes).apply {
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 
-            setTextAppearance(R.style.TextAppearance_Material3_LabelSmall)
+            setTextAppearance(MaterialR.style.TextAppearance_Material3_LabelSmall)
             setPadding(0, context.getSizeInDp(2), 0, 0)
             typeface = ResourcesCompat.getFont(context, R.font.google_sans_medium)
         }.also {

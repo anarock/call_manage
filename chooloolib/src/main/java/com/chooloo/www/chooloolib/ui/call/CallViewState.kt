@@ -228,6 +228,9 @@ class CallViewState @Inject constructor(
                 colors.getColor(R.color.green_on_primary_container)
             HOLDING, DISCONNECTING, DISCONNECTED -> stateTextColor.value =
                 colors.getAttrColor(R.attr.colorError)
+            UNKNOWN, NEW, DIALING, CONNECTING, PULLING_CALL, SELECT_PHONE_ACCOUNT -> {
+                // Default color for other states
+            }
         }
 
         if (call.state == SELECT_PHONE_ACCOUNT && !call.phoneAccountSelected) {
